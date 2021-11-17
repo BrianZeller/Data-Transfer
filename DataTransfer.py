@@ -2,7 +2,7 @@ import requests
 import json
 import csv
 import tkinter as tk
-import decoderDicts
+import Decoder
 from tkinter import filedialog
 
 pod = 'na1'
@@ -22,29 +22,18 @@ def getCSVresponses(filepath):
 
 class response:
     def __init__(self, rawResponse) -> None:
-        self.response = self.parseResponse(rawResponse)
-        
-    def decodeIndustryEiR(self, industryResponses):
-        
-        industryEiR = []
-        for industry in industryResponses[0]:
-            industryCode = decoderDicts.industry[industry]
-            
-            #subIndustryCode
-            subSubIndustryCode = 0
-            industryEiR.append("{:02d}'{:02d}'{:02d} {}".format(industryCode, subIndustryCode, subSubIndustryCode, subIndustry))
-        indEir = ", ".join(industryEiR)
+        self.industryEiR = Decoder.decodeIndustry(rawResponse[27:56])
+        self.skillEiR = Decoder.decodeSkills(rawResponse[56:67])
+        #self.response = self.parseResponse(rawResponse)
 
-    def decodeSkillsEiR(self, skillResponses):
-        skillEiR = []
-        for skill in skillResponses[0]:
-            categoryCode = decoderDicts.skill[skill]
-            skilltuple = decoderDicts.skillDict[categoryCode]
+    def printEiR(self):
+        print(self.industryEiR)
+        print(self.skillEiR)
 
-    def parseResponse(self, rawResponse):
-        self.decodeIndustryEiR(rawResponse[27:56])
-        self.decodeSkillsEiR(rawResponse[56:67])
-        return
+    # def parseResponse(self, rawResponse):
+    #     Decoder.decodeIndustry(rawResponse[27:56])
+    #     Decoder.decodeSkills(rawResponse[56:67])
+    #     return
 
 class qualtrics:
     pass
@@ -67,7 +56,5 @@ root.withdraw()
 filepath = filedialog.askopenfilename(filetypes=[("CSV","*.csv")])
 
 responses = getCSVresponses(filepath)
-print()
-print(responses)
-print()
-#print(len(responses[0]))
+example = response(responses[0])
+example.printEiR()
