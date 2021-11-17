@@ -1,3 +1,4 @@
+# Dictionaries that map the industry responses from Qualtrics to the EiR decoder
 industry = {1:8, 2:2, 3:12, 4:13, 5:1, 6:3, 7:4, 8:15, 9:6, 10:11, 12:14, 13:10, 14:5, 15:7}
 indAgriculture = {1:(1, "Agricultural Production & Policy") , 2:(4, "Animal Husbandry"), 3:(8, "Desalination"), 4:(7, "Drought Management"), 5:(9, "Environmental Protection"), 6:(11, "Forestry"), 7:(2, "Genetically Modified Crops"), 8:(3, "Green Biotechnology"), 9:(5, "Veterinary Services"), 10:(10, "Waste Management & Recycling"), 11:(6, "Water Management")}
 indCleantech = {1:(12, "Air & Carbon Capture"), 2:(5, "Bioenergy"), 3:(13, "Construction"), 4:(11, "Electric Motors"), 5:(8, "Energy Storage"), 6:(6, "Geothermal"), 7:(10, "Greywater"),  8:(3, "Hydropower"), 9:(9, "Lighting"), 10:(7, "Recycling"), 11:(1, "Renewables"), 12:(4, "Solar Energy"), 13:(2, "Wind Energy")}
@@ -27,9 +28,12 @@ subIndComputing = {1:(1, "Software"), 2:(2, "Artificial Intelligence"), 3:(3, "V
 subIndConnectiv = {1:(1, "Internet"), 2:(2, "Networking"), 3:(3, "Internet of Things"), 4:(4, "Wireless- Mobile")}
 subIndDataCapt = {1:(1, "Data Analytics"), 2:(2, "Big Data"), 3:(3, "Bioinformatics"), 4:(4, "Sensors"), 5:(5, "Wearables"), 6:(6, "Imaging"), 7:(7, "Data Storage and Retrieval"), 8:(8, "Cybersecurity"), 9:(9, "Surveillance & Biometrics")}
 subIndTelecomm = {1:(1, "Internet"), 2:(2, "Radio"), 3:(3, "Television"), 4:(4, "Telephony"), 5:(5, "Satellite")}
+indCategory = {1:indEnergy, 2:indCleantech, 3:indHlthcare, 4:indIT, 5:indTechHard, 6:indManufact, 7:indTransport, 8:indAgriculture, 9:indMonetary, 10:indRealEst, 11:indMaterials, 12:indConsGds, 13:indConsServ, 14:indPubServ, 15:indLaw}
+indHlthcareSubs = {1:subIndMedDev, 2:subIndPharm, 3:subIndBiotech, 4:subIndHlthServ, 5:subIndHlthTech, 6:subIndWellness}
+indITSubs = {1:subIndComputing, 2:subIndConnectiv, 3:subIndDataCapt, 4:subIndTelecomm}
+indConsServSubs = {1:subIndRetail, 2:subIndMedia, 3:subIndTravel}
 
-
-
+# Dictionaries that map the skill responses from Qualtrics to the EiR decoder
 skill = {1:8, 2:2, 3:7, 4:6, 5:1, 6:9, 7:3, 8:5, 9:10, 10:4}
 businessLaw = {1:(5, "Board & Advisors"), 2:(6, "Contracts"), 3:(1, "Formation & Ownership"), 4:(2, "IP Strategy"), 5:(3, "Private Equity"), 6:(4, "Term Sheets & Valuations")}
 bizModel = {1:(1, "Business Model Canvas"), 2:(4, "Customer Discovery and Validation"), 3:(3, "Revenue Models"), 4:(2, "Value Proposition")}
@@ -42,3 +46,96 @@ operations = {1:(10, "Customer Support & Call Centers"), 2:(11, "Import/ Exports
 pharma = {1:(3, "Good Manufacturing Practices"), 2:(2, "Pre-Clinical Development"), 3:(1, "Regulatory Strategy")}
 sales = {1:(8, "Brand Strategy"), 2:(1, "Business Development"), 3:(2, "Customer Acquisition"), 4:(6, "E-Commerce"), 5:(4, "Mobile Advertisement"), 6:(7, "Online Transaction Processing"), 7:(12, "Pitch Development"), 8:(3, "Product Launch"), 9:(10, "Promotions and Pricing"), 10:(5, "Search Engine Optimization"), 11:(9, "Social Media"), 12:(11, "Web Analytics & Metrics")}
 skillDict = {1:marketing, 2: bizModel, 3:MVPDesign, 4:sales, 5:operations, 6:mgmtHR, 7:finMgmt, 8:businessLaw, 9:medDev, 10:pharma}
+
+
+def decodeIndustry(rawresponses):
+    responses = []
+
+    # Converts the response fields into integer values
+    for r in rawresponses:
+        if r != '':
+            responses.append(list(map(int, r.split(','))))
+        else:
+            responses.append([])
+
+    industryEiR = []
+
+    # Loops through all of the industry categories that were selected
+    for r in responses[0]:
+        categoryCode = 0
+        industryCode = 0
+        subIndustryCode = 0
+        industryName = ''
+        
+        # Index to map
+        i = r
+
+        categoryCode = industry[r]
+        
+        # Loops through each category selected for their industries
+        for industryR in responses[i]:
+
+            # Filters out the responses for Healthcare, Information Management, and Consumer Services as they need to be handled differently due to Sub-Industries
+            if categoryCode not in [3, 4, 13]:
+                industryCode = indCategory[categoryCode][industryR][0]
+                industryName = indCategory[categoryCode][industryR][1]
+                industryEiR.append("{:02d}'{:02d}'{:02d} {}".format(categoryCode, industryCode, subIndustryCode, industryName))
+            else:
+
+                industryCode = indCategory[categoryCode][industryR]
+                if categoryCode == 3:
+                    # Sets the index for the responses for the given Industry to where it is in the Qualtrics data
+                    subindex = 18 + industryR
+                    for subIndustryR in responses[subindex]:
+                        subIndustryCode = indHlthcareSubs[industryCode][subIndustryR][0]
+                        industryName =  indHlthcareSubs[industryCode][subIndustryR][1]
+                        industryEiR.append("{:02d}'{:02d}'{:02d} {}".format(categoryCode, industryCode, subIndustryCode, industryName))
+
+                elif categoryCode == 4:
+                    # Sets the index for the responses for the given Industry to where it is in the Qualtrics data
+                    subindex = 24 + industryR
+                    for subIndustryR in responses[subindex]:
+                        subIndustryCode = indITSubs[industryCode][subIndustryR][0]
+                        industryName =  indITSubs[industryCode][subIndustryR][1]
+                        industryEiR.append("{:02d}'{:02d}'{:02d} {}".format(categoryCode, industryCode, subIndustryCode, industryName))
+
+                elif categoryCode == 13:
+                    # Sets the index for the responses for the given Industry to where it is in the Qualtrics data
+                    subindex = 15 + industryR
+                    for subIndustryR in responses[subindex]:
+                        subIndustryCode = indConsServSubs[industryCode][subIndustryR][0]
+                        industryName =  indConsServSubs[industryCode][subIndustryR][1]
+                        industryEiR.append("{:02d}'{:02d}'{:02d} {}".format(categoryCode, industryCode, subIndustryCode, industryName)) 
+
+    # Combines all of the EiR strings created into one singular string that is returned
+    return ', '.join(industryEiR)
+
+def decodeSkills(rawresponses):
+    responses = []
+
+    # Converts the response fields into integer values
+    for r in rawresponses:
+        if r != '':
+            responses.append(list(map(int, r.split(','))))
+        else:
+            responses.append([])
+    skillEiR = []
+
+    # Loops through the selected skill categories
+    for r in responses[0]:
+        categoryCode = 0
+        skillCode = 0
+        skillName = ''
+
+        i = r
+        categoryCode = skill[r]
+
+        # Loops through the selected skills within a given category
+        for skillR in responses[i]:
+            skillCode = skillDict[categoryCode][skillR][0]
+            skillName = skillDict[categoryCode][skillR][1]
+            skillEiR.append("{:02d}|{:02d} {}".format(categoryCode, skillCode, skillName))
+    
+    # Combines all of the EiR strings created into one singular string that is returned
+    return ', '.join(skillEiR)
+  
