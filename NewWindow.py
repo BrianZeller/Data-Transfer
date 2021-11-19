@@ -10,6 +10,8 @@
 
 from PyQt5 import QtCore, QtGui, QtWidgets
 
+import ForTransferButtonTest
+
 
 class Ui_MainWindow(object):
     def setupUi(self, MainWindow):
@@ -76,7 +78,12 @@ class Ui_MainWindow(object):
         self.menubar.addAction(self.menuFile.menuAction())
 
         self.retranslateUi(MainWindow)
-        self.pushButton.clicked.connect(MainWindow.dialogbox)
+
+
+        # self.pushButton.clicked.connect(MainWindow.dialogbox)
+
+        # transfer button click event
+        self.pushButton.clicked.connect(self.startTransfer)
         QtCore.QMetaObject.connectSlotsByName(MainWindow)
 
     def retranslateUi(self, MainWindow):
@@ -100,3 +107,8 @@ class Ui_MainWindow(object):
         self.radioButton_4.setText(_translate("MainWindow", "Weekly"))
         self.menuFile.setTitle(_translate("MainWindow", "File"))
         self.actionExit.setText(_translate("MainWindow", "Exit"))
+
+    # TODO:
+    # link with transfer:
+    def startTransfer(self):
+        ForTransferButtonTest.main()
