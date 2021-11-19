@@ -98,7 +98,39 @@ with open(file_name, newline='') as csv_file:
                     json_dict2['CUSTOMFIELDS']['CUSTOM_FIELD_ID'] = 'CONTACT_FIELD_128'
                     json_dict['CUSTOMFIELDS'].append(json_dict2['CUSTOMFIELDS'])
                     
-                # AREA 5: UCI AFFILIATIONS
+                # AREA 5: MOTIVATION
+                if (row['Motivations_1']):
+                    json_dict2['CUSTOMFIELDS'] = {}
+                    json_dict2['CUSTOMFIELDS']['FIELD_NAME'] = 'CONTACT_FIELD_92'
+                    json_dict2['CUSTOMFIELDS']['FIELD_VALUE'] = int(row['Motivations_1'])
+                    json_dict2['CUSTOMFIELDS']['CUSTOM_FIELD_ID'] = 'CONTACT_FIELD_92'
+                    json_dict['CUSTOMFIELDS'].append(json_dict2['CUSTOMFIELDS'])
+                if (row['Motivations_2']):
+                    json_dict2['CUSTOMFIELDS'] = {}
+                    json_dict2['CUSTOMFIELDS']['FIELD_NAME'] = 'CONTACT_FIELD_93'
+                    json_dict2['CUSTOMFIELDS']['FIELD_VALUE'] = int(row['Motivations_2'])
+                    json_dict2['CUSTOMFIELDS']['CUSTOM_FIELD_ID'] = 'CONTACT_FIELD_93'
+                    json_dict['CUSTOMFIELDS'].append(json_dict2['CUSTOMFIELDS'])
+                if (row['Motivations_3']):
+                    json_dict2['CUSTOMFIELDS'] = {}
+                    json_dict2['CUSTOMFIELDS']['FIELD_NAME'] = 'CONTACT_FIELD_94'
+                    json_dict2['CUSTOMFIELDS']['FIELD_VALUE'] = int(row['Motivations_3'])
+                    json_dict2['CUSTOMFIELDS']['CUSTOM_FIELD_ID'] = 'CONTACT_FIELD_94'
+                    json_dict['CUSTOMFIELDS'].append(json_dict2['CUSTOMFIELDS'])
+                if (row['Motivations_4']):
+                    json_dict2['CUSTOMFIELDS'] = {}
+                    json_dict2['CUSTOMFIELDS']['FIELD_NAME'] = 'CONTACT_FIELD_95'
+                    json_dict2['CUSTOMFIELDS']['FIELD_VALUE'] = int(row['Motivations_4'])
+                    json_dict2['CUSTOMFIELDS']['CUSTOM_FIELD_ID'] = 'CONTACT_FIELD_95'
+                    json_dict['CUSTOMFIELDS'].append(json_dict2['CUSTOMFIELDS'])
+                if (row['Motivations_5']):
+                    json_dict2['CUSTOMFIELDS'] = {}
+                    json_dict2['CUSTOMFIELDS']['FIELD_NAME'] = 'CONTACT_FIELD_96'
+                    json_dict2['CUSTOMFIELDS']['FIELD_VALUE'] = int(row['Motivations_5'])
+                    json_dict2['CUSTOMFIELDS']['CUSTOM_FIELD_ID'] = 'CONTACT_FIELD_96'
+                    json_dict['CUSTOMFIELDS'].append(json_dict2['CUSTOMFIELDS'])
+                                        
+                # AREA 6: UCI AFFILIATIONS
                 # if (row['UCI Staff']):
                 #     json_dict2['CUSTOMFIELDS']['FIELD_NAME'] = 'CONTACT_FIELD_23'
                 #     if (row['UCI Staff'] == 1):
@@ -107,7 +139,7 @@ with open(file_name, newline='') as csv_file:
                 #         json_dict2['CUSTOMFIELDS']['FIELD_VALUE'] = FALSE
                 #     json_dict2['CUSTOMFIELDS']['CUSTOM_FIELD_ID'] = 'CONTACT_FIELD_23'
                 #     json_dict['CUSTOMFIELDS'].append(json_dict2['CUSTOMFIELDS'])
-                                
+                   
                 # POST CSV data to Insightly   
                 #r = requests.get(insightlyAPIurl + '/Contacts/333962025', auth=(insightlyAPIkey, ''))   
                 r = requests.post(insightlyAPIurl + '/Contacts', json=json_dict, auth=(insightlyAPIkey, ''))
