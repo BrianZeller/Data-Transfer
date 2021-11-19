@@ -9,6 +9,7 @@
 
 
 from PyQt5 import QtCore, QtGui, QtWidgets
+from PyQt5.QtCore import Qt
 
 import ForTransferButtonTest
 
@@ -20,48 +21,32 @@ class Ui_MainWindow(object):
         self.centralwidget = QtWidgets.QWidget(MainWindow)
         self.centralwidget.setObjectName("centralwidget")
         self.dateTimeEdit = QtWidgets.QDateTimeEdit(self.centralwidget)
-        self.dateTimeEdit.setGeometry(QtCore.QRect(220, 150, 194, 24))
+        self.dateTimeEdit.setGeometry(QtCore.QRect(240, 120, 194, 24))
         self.dateTimeEdit.setObjectName("dateTimeEdit")
-        self.textBrowser = QtWidgets.QTextBrowser(self.centralwidget)
-        self.textBrowser.setGeometry(QtCore.QRect(220, 110, 201, 21))
-        self.textBrowser.setObjectName("textBrowser")
         self.pushButton = QtWidgets.QPushButton(self.centralwidget)
         self.pushButton.setGeometry(QtCore.QRect(100, 290, 141, 41))
         self.pushButton.setObjectName("pushButton")
-        self.radioButton = QtWidgets.QRadioButton(self.centralwidget)
-        self.radioButton.setGeometry(QtCore.QRect(80, 110, 111, 20))
-        self.radioButton.setObjectName("radioButton")
-        self.radioButton_2 = QtWidgets.QRadioButton(self.centralwidget)
-        self.radioButton_2.setGeometry(QtCore.QRect(80, 150, 100, 20))
-        self.radioButton_2.setObjectName("radioButton_2")
         self.pushButton_2 = QtWidgets.QPushButton(self.centralwidget)
         self.pushButton_2.setGeometry(QtCore.QRect(260, 290, 141, 41))
         self.pushButton_2.setObjectName("pushButton_2")
         self.pushButton_3 = QtWidgets.QPushButton(self.centralwidget)
         self.pushButton_3.setGeometry(QtCore.QRect(410, 290, 141, 41))
         self.pushButton_3.setObjectName("pushButton_3")
-        self.label = QtWidgets.QLabel(self.centralwidget)
-        self.label.setGeometry(QtCore.QRect(170, 230, 251, 31))
-        self.label.setObjectName("label")
         self.label_2 = QtWidgets.QLabel(self.centralwidget)
-        self.label_2.setGeometry(QtCore.QRect(170, 40, 311, 51))
+        self.label_2.setGeometry(QtCore.QRect(210, 30, 201, 51))
         font = QtGui.QFont()
         font.setPointSize(32)
         self.label_2.setFont(font)
         self.label_2.setObjectName("label_2")
-        self.progressBar = QtWidgets.QProgressBar(self.centralwidget)
-        self.progressBar.setGeometry(QtCore.QRect(130, 260, 331, 23))
-        self.progressBar.setProperty("value", 24)
-        self.progressBar.setObjectName("progressBar")
-        self.label_3 = QtWidgets.QLabel(self.centralwidget)
-        self.label_3.setGeometry(QtCore.QRect(220, 180, 101, 21))
-        self.label_3.setObjectName("label_3")
-        self.radioButton_3 = QtWidgets.QRadioButton(self.centralwidget)
-        self.radioButton_3.setGeometry(QtCore.QRect(310, 180, 100, 20))
-        self.radioButton_3.setObjectName("radioButton_3")
-        self.radioButton_4 = QtWidgets.QRadioButton(self.centralwidget)
-        self.radioButton_4.setGeometry(QtCore.QRect(310, 200, 100, 20))
-        self.radioButton_4.setObjectName("radioButton_4")
+        self.label_4 = QtWidgets.QLabel(self.centralwidget)
+        self.label_4.setGeometry(QtCore.QRect(190, 120, 60, 16))
+        self.label_4.setObjectName("label_4")
+        self.label_5 = QtWidgets.QLabel(self.centralwidget)
+        self.label_5.setGeometry(QtCore.QRect(190, 190, 60, 16))
+        self.label_5.setObjectName("label_5")
+        self.dateTimeEdit_2 = QtWidgets.QDateTimeEdit(self.centralwidget)
+        self.dateTimeEdit_2.setGeometry(QtCore.QRect(240, 180, 194, 24))
+        self.dateTimeEdit_2.setObjectName("dateTimeEdit_2")
         MainWindow.setCentralWidget(self.centralwidget)
         self.menubar = QtWidgets.QMenuBar(MainWindow)
         self.menubar.setGeometry(QtCore.QRect(0, 0, 613, 24))
@@ -78,37 +63,52 @@ class Ui_MainWindow(object):
         self.menubar.addAction(self.menuFile.menuAction())
 
         self.retranslateUi(MainWindow)
-
-
+        
         # self.pushButton.clicked.connect(MainWindow.dialogbox)
 
         # transfer button click event
-        self.pushButton.clicked.connect(self.startTransfer)
+        self.pushButton.clicked.connect(self.showDialog)
+        
         QtCore.QMetaObject.connectSlotsByName(MainWindow)
 
     def retranslateUi(self, MainWindow):
         _translate = QtCore.QCoreApplication.translate
         MainWindow.setWindowTitle(_translate("MainWindow", "MainWindow"))
-        self.textBrowser.setHtml(_translate("MainWindow", "<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.0//EN\" \"http://www.w3.org/TR/REC-html40/strict.dtd\">\n"
-"<html><head><meta name=\"qrichtext\" content=\"1\" /><style type=\"text/css\">\n"
-"p, li { white-space: pre-wrap; }\n"
-"</style></head><body style=\" font-family:\'.AppleSystemUIFont\'; font-size:13pt; font-weight:400; font-style:normal;\">\n"
-"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">Show current time</p>\n"
-"<p style=\"-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><br /></p></body></html>"))
         self.pushButton.setText(_translate("MainWindow", "Start Transfer"))
-        self.radioButton.setText(_translate("MainWindow", "Transfer Now"))
-        self.radioButton_2.setText(_translate("MainWindow", "Schedule"))
         self.pushButton_2.setText(_translate("MainWindow", "Pause"))
         self.pushButton_3.setText(_translate("MainWindow", "Terminte"))
-        self.label.setText(_translate("MainWindow", "Schedule Transfer Selected! (Time)"))
         self.label_2.setText(_translate("MainWindow", "Date Transfer"))
-        self.label_3.setText(_translate("MainWindow", "Repeat every:"))
-        self.radioButton_3.setText(_translate("MainWindow", "Daliy"))
-        self.radioButton_4.setText(_translate("MainWindow", "Weekly"))
+        self.label_4.setText(_translate("MainWindow", "From:"))
+        self.label_5.setText(_translate("MainWindow", "To:"))
         self.menuFile.setTitle(_translate("MainWindow", "File"))
         self.actionExit.setText(_translate("MainWindow", "Exit"))
-
+        
+    
     # TODO:
-    # link with transfer:
-    def startTransfer(self):
-        ForTransferButtonTest.main()
+    def showDialog(self):
+        num = ForTransferButtonTest.getNum()
+        progress = QtWidgets.QProgressDialog()
+        progress.setWindowTitle("Please wait...")
+        progress.setLabelText("Uploading...")
+        progress.setCancelButtonText("Cancel")
+        progress.setMinimumDuration(5)
+        progress.setWindowModality(Qt.WindowModal)
+        progress.setRange(0, num)
+        for i in range(num):
+            progress.setValue(i)
+            message = ForTransferButtonTest.main()
+            # message = "The file inputted into the program can not be found within the path"
+            if progress.wasCanceled():
+                QtWidgets.QMessageBox.warning(None, "Error", "Canceled", QtWidgets.QMessageBox.Yes)
+                break
+        if(message):
+            progress.setValue(num)
+            QtWidgets.QMessageBox.warning(None, "Done", message, QtWidgets.QMessageBox.Yes)
+        else:
+            progress.setValue(num)
+            QtWidgets.QMessageBox.information(None, "Done", "Successed", QtWidgets.QMessageBox.Yes)
+
+    
+
+
+

@@ -3,13 +3,13 @@ from PyQt5.QtWidgets import *
 from PyQt5.QtGui     import *
 from PyQt5.QtCore    import *
 
-from Error import Ui_Dialog
+
 from NewWindow import Ui_MainWindow
 
 class MyDialog(QDialog):
     def __init__(self):
         super().__init__()
-        self.ui = Ui_Dialog()
+        self.ui = error_UI()
         self.ui.setupUi(self)
 
 class MyWindow(QMainWindow):
