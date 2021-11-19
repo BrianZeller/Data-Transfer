@@ -105,8 +105,9 @@ class Ui_MainWindow(object):
             progress.setValue(num)
             QtWidgets.QMessageBox.warning(None, "Done", message, QtWidgets.QMessageBox.Yes)
         else:
+            message = str(num) + " records has been transferred successfully."
             progress.setValue(num)
-            QtWidgets.QMessageBox.information(None, "Done", "Successed", QtWidgets.QMessageBox.Yes)
+            QtWidgets.QMessageBox.information(None, "Done", message, QtWidgets.QMessageBox.Yes)
 
     
 

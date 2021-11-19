@@ -7,14 +7,14 @@ from tkinter import filedialog
 from os import system
 
 def getNum():
-    file_name = 'qualtrics_survey.csv'
-
-    with open(file_name, newline='') as csv_file:
-        reader = csv.DictReader(csv_file)
-        num = (len(csv_file.readline()))
-        print("NUM: ", num)
-        csv_file.close()
-    return num
+    file_name = '/Users/joviwyel/UCI/2021_Fall/INF117/qualtrics_survey.csv'
+    count = 0
+    with open(file_name, 'r') as f:
+        csv_reader = csv.reader(f)
+        for row in csv_reader:
+            count+= 1
+    print(count)
+    return count
 
 def main():
     message = ""
@@ -22,14 +22,14 @@ def main():
     pod = 'na1'
     insightlyAPIkey = "2749c36f-192d-423b-ab08-e9b793299427"
     insightlyAPIurl = "https://api.{}.insightly.com/v3.1".format(pod)
+    try:
+        # CSV Source
+        file_name = '/Users/joviwyel/UCI/2021_Fall/INF117/qualtrics_survey.csv'
 
-    # CSV Source
-    file_name = 'qualtrics_survey.csv'
+        with open(file_name, newline='') as csv_file:
+            reader = csv.DictReader(csv_file)
+            count = 0
 
-    with open(file_name, newline='') as csv_file:
-        reader = csv.DictReader(csv_file)
-        count = 0
-        try:
             for row in reader:
                 if (count >= 2):  # row 0-1 are headers
 
@@ -78,14 +78,14 @@ def main():
                 count += 1
 
             count -= count
-            print(count, "rows of data has been transferred successfully.")
+            # print(count, "rows of data has been transferred successfully.")
 
 
-        except (csv.Error, FileNotFoundError) as e:  # display error
-            if type(e) is FileNotFoundError:
-                message = "The file inputted into the program can not be found within the path"
-            else:
-                message = "There has been a CSV error"
-            system.exit('file {}, line {}: {}'.format(file_name, reader.line_num, e))
+    except (csv.Error, FileNotFoundError) as e:  # display error
+        if type(e) is FileNotFoundError:
+            message = "The file inputted into the program can not be found within the path"
+        else:
+            message = "There has been a CSV error"
+        # system.exit('file {}, line {}: {}'.format(file_name, reader.line_num, e))
 
     return message
