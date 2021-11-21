@@ -120,7 +120,7 @@ class Ui_MainWindow(object):
         options = QtWidgets.QFileDialog.Options()
         options |= QtWidgets.QFileDialog.DontUseNativeDialog
         fileName, _ = QtWidgets.QFileDialog.getOpenFileName(None, "QFileDialog.getOpenFileName()", "",
-                                                  "All Files (*);;Python Files (*.py)", options=options)
+                                                  "(*.csv);;Python Files (*.py)", options=options)
         if fileName:
             print("get from dialog:", fileName)
             Ui_MainWindow.test = fileName
