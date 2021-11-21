@@ -158,6 +158,11 @@ with open(file_name, newline='') as csv_file:
                         json_dict2['CUSTOMFIELDS']['FIELD_VALUE'] = "na"
                         json_dict2['CUSTOMFIELDS']['CUSTOM_FIELD_ID'] = 'CONTACT_FIELD_18'
                         json_dict['CUSTOMFIELDS'].append(json_dict2['CUSTOMFIELDS'])
+                        json_dict2['CUSTOMFIELDS'] = {}
+                        json_dict2['CUSTOMFIELDS']['FIELD_NAME'] = 'UCI_unit__c'
+                        json_dict2['CUSTOMFIELDS']['FIELD_VALUE'] = None
+                        json_dict2['CUSTOMFIELDS']['CUSTOM_FIELD_ID'] = 'UCI_unit__c'
+                        json_dict['CUSTOMFIELDS'].append(json_dict2['CUSTOMFIELDS'])
                     else: 
                         if ('1' in uci_affiliation): # UCI student
                             json_dict2['CUSTOMFIELDS'] = {}
@@ -189,50 +194,50 @@ with open(file_name, newline='') as csv_file:
                             json_dict2['CUSTOMFIELDS']['FIELD_VALUE'] = True
                             json_dict2['CUSTOMFIELDS']['CUSTOM_FIELD_ID'] = 'CONTACT_FIELD_132'
                             json_dict['CUSTOMFIELDS'].append(json_dict2['CUSTOMFIELDS'])   
-                   
-                        academic_area = []       
-                        if (row['UCI Student']):
-                            academic_area.extend(row['UCI Student'].split(","))
-                        if (row['UCI Alumni']):
-                            academic_area.extend(row['UCI Alumni'].split(","))
-                        if (row['UCI Faculty']):
-                            academic_area.extend(row['UCI Faculty'].split(","))
-                        if (academic_area):
-                            academic_area = list(set(academic_area)) # remove duplicated
-                            academic_decoder = {
-                                1:";Claire Trevor School of the Arts"
-                                ,2:";Francisco J. Ayala School of Biological Sciences"
-                                ,3:";The Paul Merage School of Business"
-                                ,5:";The Henry Samueli School of Engineering"
-                                ,6:";School of Humanities"
-                                ,7:";Donald Bren School of Information and Computer Sciences"
-                                ,9:";School of Law"
-                                ,10:";School of Medicine"
-                                ,13:";School of Physical Sciences" # duplicated with 14
-                                ,14:";School of Physical Sciences" # duplicated with 13
-                                ,17:";School of Social Sciences"
-                                #,:";Teaching & Learning"
-                                #,:";Office of Research"
-                                ,4:";School of Education"
-                                ,8:";Interdisciplinary Studies"
-                                ,11:";Sue & Bill Gross School of Nursing"
-                                ,12:";Department of Pharmaceutical Sciences"
-                                ,15:";Program in Public Health"
-                                ,16:";School of Social Ecology"
-                                ,18:";Extension"
-                                #,:";CALIT2"
-                                #,:";UC Irvine Health"
-                                #,:";Beckman Laser Institute"
-                            }
-                            str1 = ""
-                            for i in academic_area:
-                                str1 += academic_decoder[int(i)]
-                            json_dict2['CUSTOMFIELDS'] = {}
-                            json_dict2['CUSTOMFIELDS']['FIELD_NAME'] = 'UCI_unit__c'
-                            json_dict2['CUSTOMFIELDS']['FIELD_VALUE'] = str1
-                            json_dict2['CUSTOMFIELDS']['CUSTOM_FIELD_ID'] = 'UCI_unit__c'
-                            json_dict['CUSTOMFIELDS'].append(json_dict2['CUSTOMFIELDS'])
-                            
+    
+                academic_area = []       
+                if (row['UCI Student']):
+                    academic_area.extend(row['UCI Student'].split(","))
+                if (row['UCI Alumni']):
+                    academic_area.extend(row['UCI Alumni'].split(","))
+                if (row['UCI Faculty']):
+                    academic_area.extend(row['UCI Faculty'].split(","))
+                if (academic_area):
+                    academic_area = list(set(academic_area)) # remove duplicated
+                    academic_decoder = {
+                        1:";Claire Trevor School of the Arts"
+                        ,2:";Francisco J. Ayala School of Biological Sciences"
+                        ,3:";The Paul Merage School of Business"
+                        ,5:";The Henry Samueli School of Engineering"
+                        ,6:";School of Humanities"
+                        ,7:";Donald Bren School of Information and Computer Sciences"
+                        ,9:";School of Law"
+                        ,10:";School of Medicine"
+                        ,13:";School of Physical Sciences" # duplicated with 14
+                        ,14:";School of Physical Sciences" # duplicated with 13
+                        ,17:";School of Social Sciences"
+                        #,:";Teaching & Learning"
+                        #,:";Office of Research"
+                        ,4:";School of Education"
+                        ,8:";Interdisciplinary Studies"
+                        ,11:";Sue & Bill Gross School of Nursing"
+                        ,12:";Department of Pharmaceutical Sciences"
+                        ,15:";Program in Public Health"
+                        ,16:";School of Social Ecology"
+                        ,18:";Extension"
+                        #,:";CALIT2"
+                        #,:";UC Irvine Health"
+                        #,:";Beckman Laser Institute"
+                    }
+                    str1 = ""
+                    for i in academic_area:
+                        str1 += academic_decoder[int(i)]
+                    json_dict2['CUSTOMFIELDS'] = {}
+                    json_dict2['CUSTOMFIELDS']['FIELD_NAME'] = 'UCI_unit__c'
+                    json_dict2['CUSTOMFIELDS']['FIELD_VALUE'] = str1
+                    json_dict2['CUSTOMFIELDS']['CUSTOM_FIELD_ID'] = 'UCI_unit__c'
+                    json_dict['CUSTOMFIELDS'].append(json_dict2['CUSTOMFIELDS'])
+            
                 if (row['UCI Staff_1_TEXT'] or row['UCI Staff_2_TEXT']):
                     json_dict2['CUSTOMFIELDS'] = {}
                     json_dict2['CUSTOMFIELDS']['FIELD_NAME'] = 'CONTACT_FIELD_142'
@@ -259,4 +264,5 @@ with open(file_name, newline='') as csv_file:
         
     except csv.Error as e:  # display error
         sys.exit('file {}, line {}: {}'.format(file_name, reader.line_num, e))
+
 
