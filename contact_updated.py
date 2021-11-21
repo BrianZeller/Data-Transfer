@@ -1,4 +1,3 @@
-from tkinter.constants import TRUE, FALSE
 import requests
 import json
 import csv
@@ -131,17 +130,97 @@ with open(file_name, newline='') as csv_file:
                     json_dict['CUSTOMFIELDS'].append(json_dict2['CUSTOMFIELDS'])
                                         
                 # AREA 6: UCI AFFILIATIONS
-                # if (row['UCI Staff']):
-                #     json_dict2['CUSTOMFIELDS']['FIELD_NAME'] = 'CONTACT_FIELD_23'
-                #     if (row['UCI Staff'] == 1):
-                #         json_dict2['CUSTOMFIELDS']['FIELD_VALUE'] = TRUE
-                #     if (row['UCI Staff'] == 0):
-                #         json_dict2['CUSTOMFIELDS']['FIELD_VALUE'] = FALSE
-                #     json_dict2['CUSTOMFIELDS']['CUSTOM_FIELD_ID'] = 'CONTACT_FIELD_23'
-                #     json_dict['CUSTOMFIELDS'].append(json_dict2['CUSTOMFIELDS'])
-                   
+                if (row['UCI Affiliation']):
+                    uci_affiliation = row['UCI Affiliation'].split(",")
+                    if ('1' in uci_affiliation): # UCI student
+                        json_dict2['CUSTOMFIELDS'] = {}
+                        json_dict2['CUSTOMFIELDS']['FIELD_NAME'] = 'CONTACT_FIELD_154'
+                        json_dict2['CUSTOMFIELDS']['FIELD_VALUE'] = "UCI student"
+                        json_dict2['CUSTOMFIELDS']['CUSTOM_FIELD_ID'] = 'CONTACT_FIELD_154'
+                        json_dict['CUSTOMFIELDS'].append(json_dict2['CUSTOMFIELDS'])
+                    if ('2' in uci_affiliation): # UCI student alum
+                        json_dict2['CUSTOMFIELDS'] = {}
+                        json_dict2['CUSTOMFIELDS']['FIELD_NAME'] = 'CONTACT_FIELD_133'
+                        json_dict2['CUSTOMFIELDS']['FIELD_VALUE'] = "UCI student alum"
+                        json_dict2['CUSTOMFIELDS']['CUSTOM_FIELD_ID'] = 'CONTACT_FIELD_133'
+                        json_dict['CUSTOMFIELDS'].append(json_dict2['CUSTOMFIELDS'])    
+                    if ('3' in uci_affiliation): # UCI faculty 
+                        json_dict2['CUSTOMFIELDS'] = {}
+                        json_dict2['CUSTOMFIELDS']['FIELD_NAME'] = 'CONTACT_FIELD_82'
+                        json_dict2['CUSTOMFIELDS']['FIELD_VALUE'] = "Unsure"
+                        json_dict2['CUSTOMFIELDS']['CUSTOM_FIELD_ID'] = 'CONTACT_FIELD_82'
+                        json_dict['CUSTOMFIELDS'].append(json_dict2['CUSTOMFIELDS']) 
+                    if ('6' in uci_affiliation): # UCI staff
+                        json_dict2['CUSTOMFIELDS'] = {}
+                        json_dict2['CUSTOMFIELDS']['FIELD_NAME'] = 'CONTACT_FIELD_23'
+                        json_dict2['CUSTOMFIELDS']['FIELD_VALUE'] = True
+                        json_dict2['CUSTOMFIELDS']['CUSTOM_FIELD_ID'] = 'CONTACT_FIELD_23'
+                        json_dict['CUSTOMFIELDS'].append(json_dict2['CUSTOMFIELDS'])    
+                    if ('4' in uci_affiliation): # Relatives of UCI community
+                        json_dict2['CUSTOMFIELDS'] = {}
+                        json_dict2['CUSTOMFIELDS']['FIELD_NAME'] = 'CONTACT_FIELD_132'
+                        json_dict2['CUSTOMFIELDS']['FIELD_VALUE'] = True
+                        json_dict2['CUSTOMFIELDS']['CUSTOM_FIELD_ID'] = 'CONTACT_FIELD_132'
+                        json_dict['CUSTOMFIELDS'].append(json_dict2['CUSTOMFIELDS'])   
+                 
+                academic_area = []       
+                if (row['UCI Student']):
+                    academic_area.extend(row['UCI Student'].split(","))
+                if (row['UCI Alumni']):
+                    academic_area.extend(row['UCI Alumni'].split(","))
+                if (row['UCI Faculty']):
+                    academic_area.extend(row['UCI Faculty'].split(","))
+                if (academic_area):
+                    academic_area = list(set(academic_area)) # remove duplicated
+                    academic_decoder = {
+                        1:";Claire Trevor School of the Arts"
+                        ,2:";Francisco J. Ayala School of Biological Sciences"
+                        ,3:";The Paul Merage School of Business"
+                        ,5:";The Henry Samueli School of Engineering"
+                        ,6:";School of Humanities"
+                        ,7:";Donald Bren School of Information and Computer Sciences"
+                        ,9:";School of Law"
+                        ,10:";School of Medicine"
+                        ,13:";School of Physical Sciences" # duplicated with 14
+                        ,14:";School of Physical Sciences" # duplicated with 13
+                        ,17:";School of Social Sciences"
+                        #,:";Teaching & Learning"
+                        #,:";Office of Research"
+                        ,4:";School of Education"
+                        ,8:";Interdisciplinary Studies"
+                        ,11:";Sue & Bill Gross School of Nursing"
+                        ,12:";Department of Pharmaceutical Sciences"
+                        ,15:";Program in Public Health"
+                        ,16:";School of Social Ecology"
+                        ,18:";Extension"
+                        #,:";CALIT2"
+                        #,:";UC Irvine Health"
+                        #,:";Beckman Laser Institute"
+                    }
+                    str1 = ""
+                    for i in academic_area:
+                        str1 += academic_decoder[int(i)]
+                    json_dict2['CUSTOMFIELDS'] = {}
+                    json_dict2['CUSTOMFIELDS']['FIELD_NAME'] = 'UCI_unit__c'
+                    json_dict2['CUSTOMFIELDS']['FIELD_VALUE'] = str1
+                    json_dict2['CUSTOMFIELDS']['CUSTOM_FIELD_ID'] = 'UCI_unit__c'
+                    json_dict['CUSTOMFIELDS'].append(json_dict2['CUSTOMFIELDS'])
+                    
+                if (row['UCI Staff_1_TEXT'] or row['UCI Staff_2_TEXT']):
+                    json_dict2['CUSTOMFIELDS'] = {}
+                    json_dict2['CUSTOMFIELDS']['FIELD_NAME'] = 'CONTACT_FIELD_142'
+                    json_dict2['CUSTOMFIELDS']['FIELD_VALUE'] = row['UCI Staff_1_TEXT'] + row['UCI Staff_2_TEXT']
+                    json_dict2['CUSTOMFIELDS']['CUSTOM_FIELD_ID'] = 'CONTACT_FIELD_142'
+                    json_dict['CUSTOMFIELDS'].append(json_dict2['CUSTOMFIELDS'])
+
+                # AREA 7: Organization
+                
+                
+                # AREA 8: Misc.
+                
+                #print(json_dict)
                 # POST CSV data to Insightly   
-                #r = requests.get(insightlyAPIurl + '/Contacts/333962025', auth=(insightlyAPIkey, ''))   
+                #r = requests.get(insightlyAPIurl + '/Contacts/333977981', auth=(insightlyAPIkey, ''))   
                 r = requests.post(insightlyAPIurl + '/Contacts', json=json_dict, auth=(insightlyAPIkey, ''))
                 print(r.text)
                 imported_count += 1
