@@ -6,8 +6,12 @@ import tkinter as tk
 from tkinter import filedialog
 from os import system
 
-def getNum():
-    file_name = '/Users/joviwyel/UCI/2021_Fall/INF117/qualtrics_survey.csv'
+def getNum(file_path):
+    # file_name = '/Users/joviwyel/UCI/2021_Fall/INF117/qualtrics_survey.csv'
+    print("getNum is being called")
+    file_name = file_path
+    print("file_path pass in:" , file_path)
+    print("file_name got:" , file_name)
     count = 0
     with open(file_name, 'r') as f:
         csv_reader = csv.reader(f)
@@ -16,7 +20,7 @@ def getNum():
     print(count)
     return count
 
-def main():
+def main(file_path):
     message = ""
     # Insightly API Key
     pod = 'na1'
@@ -24,8 +28,8 @@ def main():
     insightlyAPIurl = "https://api.{}.insightly.com/v3.1".format(pod)
     try:
         # CSV Source
-        file_name = '/Users/joviwyel/UCI/2021_Fall/INF117/qualtrics_survey.csv'
-
+        # file_name = '/Users/joviwyel/UCI/2021_Fall/INF117/qualtrics_survey.csv'
+        file_name = file_path
         with open(file_name, newline='') as csv_file:
             reader = csv.DictReader(csv_file)
             count = 0

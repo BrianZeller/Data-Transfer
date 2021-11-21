@@ -14,7 +14,12 @@ from PyQt5.QtCore import Qt
 import ForTransferButtonTest
 
 
+
+
 class Ui_MainWindow(object):
+    test = ""
+    testNum = 0
+
     def setupUi(self, MainWindow):
         MainWindow.setObjectName("MainWindow")
         MainWindow.resize(613, 440)
@@ -63,19 +68,20 @@ class Ui_MainWindow(object):
         self.menubar.addAction(self.menuFile.menuAction())
 
         self.retranslateUi(MainWindow)
-        
-        # self.pushButton.clicked.connect(MainWindow.dialogbox)
 
         # transfer button click event
         self.pushButton.clicked.connect(self.showDialog)
+        self.pushButton_2.clicked.connect(self.openFileNameDialog)
         
         QtCore.QMetaObject.connectSlotsByName(MainWindow)
+
+        # self.openFileNameDialog()
 
     def retranslateUi(self, MainWindow):
         _translate = QtCore.QCoreApplication.translate
         MainWindow.setWindowTitle(_translate("MainWindow", "MainWindow"))
         self.pushButton.setText(_translate("MainWindow", "Start Transfer"))
-        self.pushButton_2.setText(_translate("MainWindow", "Pause"))
+        self.pushButton_2.setText(_translate("MainWindow", "Chose CSV File"))
         self.pushButton_3.setText(_translate("MainWindow", "Terminte"))
         self.label_2.setText(_translate("MainWindow", "Date Transfer"))
         self.label_4.setText(_translate("MainWindow", "From:"))
@@ -86,7 +92,8 @@ class Ui_MainWindow(object):
     
     # TODO:
     def showDialog(self):
-        num = ForTransferButtonTest.getNum()
+        print("test in showDialog:", Ui_MainWindow.test)
+        num = ForTransferButtonTest.getNum(Ui_MainWindow.test)
         progress = QtWidgets.QProgressDialog()
         progress.setWindowTitle("Please wait...")
         progress.setLabelText("Uploading...")
@@ -96,7 +103,7 @@ class Ui_MainWindow(object):
         progress.setRange(0, num)
         for i in range(num):
             progress.setValue(i)
-            message = ForTransferButtonTest.main()
+            message = ForTransferButtonTest.main(Ui_MainWindow.test)
             # message = "The file inputted into the program can not be found within the path"
             if progress.wasCanceled():
                 QtWidgets.QMessageBox.warning(None, "Error", "Canceled", QtWidgets.QMessageBox.Yes)
@@ -109,7 +116,16 @@ class Ui_MainWindow(object):
             progress.setValue(num)
             QtWidgets.QMessageBox.information(None, "Done", message, QtWidgets.QMessageBox.Yes)
 
-    
+    def openFileNameDialog(self):
+        options = QtWidgets.QFileDialog.Options()
+        options |= QtWidgets.QFileDialog.DontUseNativeDialog
+        fileName, _ = QtWidgets.QFileDialog.getOpenFileName(None, "QFileDialog.getOpenFileName()", "",
+                                                  "All Files (*);;Python Files (*.py)", options=options)
+        if fileName:
+            print("get from dialog:", fileName)
+            Ui_MainWindow.test = fileName
+            print("test:", Ui_MainWindow.test)
+
 
 
 
