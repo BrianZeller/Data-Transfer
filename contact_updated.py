@@ -132,37 +132,64 @@ with open(file_name, newline='') as csv_file:
                 # AREA 6: UCI AFFILIATIONS
                 if (row['UCI Affiliation']):
                     uci_affiliation = row['UCI Affiliation'].split(",")
-                    if ('1' in uci_affiliation): # UCI student
+                    if ('9' in uci_affiliation): # if no affiliation, set all text to "na"
                         json_dict2['CUSTOMFIELDS'] = {}
                         json_dict2['CUSTOMFIELDS']['FIELD_NAME'] = 'CONTACT_FIELD_154'
-                        json_dict2['CUSTOMFIELDS']['FIELD_VALUE'] = "UCI student"
+                        json_dict2['CUSTOMFIELDS']['FIELD_VALUE'] = "na"
                         json_dict2['CUSTOMFIELDS']['CUSTOM_FIELD_ID'] = 'CONTACT_FIELD_154'
                         json_dict['CUSTOMFIELDS'].append(json_dict2['CUSTOMFIELDS'])
-                    if ('2' in uci_affiliation): # UCI student alum
                         json_dict2['CUSTOMFIELDS'] = {}
                         json_dict2['CUSTOMFIELDS']['FIELD_NAME'] = 'CONTACT_FIELD_133'
-                        json_dict2['CUSTOMFIELDS']['FIELD_VALUE'] = "UCI student alum"
+                        json_dict2['CUSTOMFIELDS']['FIELD_VALUE'] = "na"
                         json_dict2['CUSTOMFIELDS']['CUSTOM_FIELD_ID'] = 'CONTACT_FIELD_133'
-                        json_dict['CUSTOMFIELDS'].append(json_dict2['CUSTOMFIELDS'])    
-                    if ('3' in uci_affiliation): # UCI faculty 
+                        json_dict['CUSTOMFIELDS'].append(json_dict2['CUSTOMFIELDS'])   
                         json_dict2['CUSTOMFIELDS'] = {}
                         json_dict2['CUSTOMFIELDS']['FIELD_NAME'] = 'CONTACT_FIELD_82'
-                        json_dict2['CUSTOMFIELDS']['FIELD_VALUE'] = "Unsure"
+                        json_dict2['CUSTOMFIELDS']['FIELD_VALUE'] = "na"
                         json_dict2['CUSTOMFIELDS']['CUSTOM_FIELD_ID'] = 'CONTACT_FIELD_82'
                         json_dict['CUSTOMFIELDS'].append(json_dict2['CUSTOMFIELDS']) 
-                    if ('6' in uci_affiliation): # UCI staff
                         json_dict2['CUSTOMFIELDS'] = {}
-                        json_dict2['CUSTOMFIELDS']['FIELD_NAME'] = 'CONTACT_FIELD_23'
-                        json_dict2['CUSTOMFIELDS']['FIELD_VALUE'] = True
-                        json_dict2['CUSTOMFIELDS']['CUSTOM_FIELD_ID'] = 'CONTACT_FIELD_23'
-                        json_dict['CUSTOMFIELDS'].append(json_dict2['CUSTOMFIELDS'])    
-                    if ('4' in uci_affiliation): # Relatives of UCI community
+                        json_dict2['CUSTOMFIELDS']['FIELD_NAME'] = 'CONTACT_FIELD_142'
+                        json_dict2['CUSTOMFIELDS']['FIELD_VALUE'] = "na"
+                        json_dict2['CUSTOMFIELDS']['CUSTOM_FIELD_ID'] = 'CONTACT_FIELD_142'
+                        json_dict['CUSTOMFIELDS'].append(json_dict2['CUSTOMFIELDS']) 
                         json_dict2['CUSTOMFIELDS'] = {}
-                        json_dict2['CUSTOMFIELDS']['FIELD_NAME'] = 'CONTACT_FIELD_132'
-                        json_dict2['CUSTOMFIELDS']['FIELD_VALUE'] = True
-                        json_dict2['CUSTOMFIELDS']['CUSTOM_FIELD_ID'] = 'CONTACT_FIELD_132'
-                        json_dict['CUSTOMFIELDS'].append(json_dict2['CUSTOMFIELDS'])   
-                 
+                        json_dict2['CUSTOMFIELDS']['FIELD_NAME'] = 'CONTACT_FIELD_18'
+                        json_dict2['CUSTOMFIELDS']['FIELD_VALUE'] = "na"
+                        json_dict2['CUSTOMFIELDS']['CUSTOM_FIELD_ID'] = 'CONTACT_FIELD_18'
+                        json_dict['CUSTOMFIELDS'].append(json_dict2['CUSTOMFIELDS'])
+                    else: 
+                        if ('1' in uci_affiliation): # UCI student
+                            json_dict2['CUSTOMFIELDS'] = {}
+                            json_dict2['CUSTOMFIELDS']['FIELD_NAME'] = 'CONTACT_FIELD_154'
+                            json_dict2['CUSTOMFIELDS']['FIELD_VALUE'] = "UCI student"
+                            json_dict2['CUSTOMFIELDS']['CUSTOM_FIELD_ID'] = 'CONTACT_FIELD_154'
+                            json_dict['CUSTOMFIELDS'].append(json_dict2['CUSTOMFIELDS'])
+                        if ('2' in uci_affiliation): # UCI student alum
+                            json_dict2['CUSTOMFIELDS'] = {}
+                            json_dict2['CUSTOMFIELDS']['FIELD_NAME'] = 'CONTACT_FIELD_133'
+                            json_dict2['CUSTOMFIELDS']['FIELD_VALUE'] = "UCI student alum"
+                            json_dict2['CUSTOMFIELDS']['CUSTOM_FIELD_ID'] = 'CONTACT_FIELD_133'
+                            json_dict['CUSTOMFIELDS'].append(json_dict2['CUSTOMFIELDS'])    
+                        if ('3' in uci_affiliation): # UCI faculty 
+                            json_dict2['CUSTOMFIELDS'] = {}
+                            json_dict2['CUSTOMFIELDS']['FIELD_NAME'] = 'CONTACT_FIELD_82'
+                            json_dict2['CUSTOMFIELDS']['FIELD_VALUE'] = "Current"
+                            json_dict2['CUSTOMFIELDS']['CUSTOM_FIELD_ID'] = 'CONTACT_FIELD_82'
+                            json_dict['CUSTOMFIELDS'].append(json_dict2['CUSTOMFIELDS']) 
+                        if ('4' in uci_affiliation): # UCI staff
+                            json_dict2['CUSTOMFIELDS'] = {}
+                            json_dict2['CUSTOMFIELDS']['FIELD_NAME'] = 'CONTACT_FIELD_23'
+                            json_dict2['CUSTOMFIELDS']['FIELD_VALUE'] = True
+                            json_dict2['CUSTOMFIELDS']['CUSTOM_FIELD_ID'] = 'CONTACT_FIELD_23'
+                            json_dict['CUSTOMFIELDS'].append(json_dict2['CUSTOMFIELDS'])    
+                        if ('5' in uci_affiliation): # Relatives of UCI community
+                            json_dict2['CUSTOMFIELDS'] = {}
+                            json_dict2['CUSTOMFIELDS']['FIELD_NAME'] = 'CONTACT_FIELD_132'
+                            json_dict2['CUSTOMFIELDS']['FIELD_VALUE'] = True
+                            json_dict2['CUSTOMFIELDS']['CUSTOM_FIELD_ID'] = 'CONTACT_FIELD_132'
+                            json_dict['CUSTOMFIELDS'].append(json_dict2['CUSTOMFIELDS'])   
+                   
                 academic_area = []       
                 if (row['UCI Student']):
                     academic_area.extend(row['UCI Student'].split(","))
