@@ -9,14 +9,17 @@
 
 
 from PyQt5 import QtCore, QtGui, QtWidgets
-from PyQt5.QtCore import Qt
+from PyQt5.QtCore import Qt, QDate, QDateTime, QTime
 
 import ForTransferButtonTest
 
 
 class Ui_MainWindow(object):
-    test = ""
+    filePath = ""
     testNum = 0
+    startDate = ""
+    endDate = ""
+    default = True
 
     def setupUi(self, MainWindow):
         MainWindow.setObjectName("MainWindow")
@@ -39,7 +42,7 @@ class Ui_MainWindow(object):
         self.label_2.setFont(font)
         self.label_2.setObjectName("label_2")
         self.widget = QtWidgets.QWidget(self.centralwidget)
-        self.widget.setGeometry(QtCore.QRect(160, 117, 255, 22))
+        self.widget.setGeometry(QtCore.QRect(160, 117, 450, 22))
         self.widget.setObjectName("widget")
         self.gridLayout_2 = QtWidgets.QGridLayout(self.widget)
         self.gridLayout_2.setContentsMargins(0, 0, 0, 0)
@@ -51,7 +54,7 @@ class Ui_MainWindow(object):
         self.label.setObjectName("label")
         self.gridLayout_2.addWidget(self.label, 0, 1, 1, 1)
         self.widget1 = QtWidgets.QWidget(self.centralwidget)
-        self.widget1.setGeometry(QtCore.QRect(160, 160, 313, 61))
+        self.widget1.setGeometry(QtCore.QRect(160, 160, 360, 61))
         self.widget1.setObjectName("widget1")
         self.gridLayout = QtWidgets.QGridLayout(self.widget1)
         self.gridLayout.setContentsMargins(0, 0, 0, 0)
@@ -62,14 +65,23 @@ class Ui_MainWindow(object):
         self.label_4 = QtWidgets.QLabel(self.widget1)
         self.label_4.setObjectName("label_4")
         self.gridLayout.addWidget(self.label_4, 0, 1, 1, 1)
-        self.dateTimeEdit = QtWidgets.QDateTimeEdit(self.widget1)
-        self.dateTimeEdit.setObjectName("dateTimeEdit")
-        self.gridLayout.addWidget(self.dateTimeEdit, 0, 2, 1, 1)
+
+
         self.label_5 = QtWidgets.QLabel(self.widget1)
         self.label_5.setObjectName("label_5")
         self.gridLayout.addWidget(self.label_5, 1, 1, 1, 1)
-        self.dateTimeEdit_2 = QtWidgets.QDateTimeEdit(self.widget1)
+
+        # toDate:
+        self.dateTimeEdit = QtWidgets.QDateTimeEdit(QDateTime.currentDateTime().addDays(-365))
+        self.dateTimeEdit.setObjectName("dateTimeEdit")
+        self.dateTimeEdit.setDisplayFormat("yyyy-MM-dd hh:mm:ss")
+        self.gridLayout.addWidget(self.dateTimeEdit, 0, 2, 1, 1)
+
+
+        self.dateTimeEdit_2 = QtWidgets.QDateTimeEdit(QDateTime.currentDateTime())
         self.dateTimeEdit_2.setObjectName("dateTimeEdit_2")
+        self.dateTimeEdit_2.setDisplayFormat("yyyy-MM-dd hh:mm:ss")
+
         self.gridLayout.addWidget(self.dateTimeEdit_2, 1, 2, 1, 1)
         MainWindow.setCentralWidget(self.centralwidget)
         self.menubar = QtWidgets.QMenuBar(MainWindow)
@@ -93,9 +105,19 @@ class Ui_MainWindow(object):
         self.pushButton_2.clicked.connect(self.openFileNameDialog)
         self.pushButton_3.clicked.connect(MainWindow.close)
 
+        # radiobuttons
+        self.radioButton.clicked.connect(self.check1)
+        self.radioButton_2.clicked.connect(self.check2)
+
         QtCore.QMetaObject.connectSlotsByName(MainWindow)
 
     def retranslateUi(self, MainWindow):
+
+        # read date from txt file
+        with open("savedData.txt", 'r') as showDate:
+            Ui_MainWindow.startDate = showDate.readline()
+        print(Ui_MainWindow.startDate)
+
         _translate = QtCore.QCoreApplication.translate
         MainWindow.setWindowTitle(_translate("MainWindow", "MainWindow"))
         self.pushButton.setText(_translate("MainWindow", "Start Transfer"))
@@ -103,7 +125,7 @@ class Ui_MainWindow(object):
         self.pushButton_3.setText(_translate("MainWindow", "Exit"))
         self.label_2.setText(_translate("MainWindow", "Data Transfer"))
         self.radioButton_2.setText(_translate("MainWindow", "From Last Transfer Date: "))
-        self.label.setText(_translate("MainWindow", "Show date"))
+        self.label.setText(_translate("MainWindow", Ui_MainWindow.startDate))
         self.radioButton.setText(_translate("MainWindow", "Set Timeframe"))
         self.label_4.setText(_translate("MainWindow", "From:"))
         self.label_5.setText(_translate("MainWindow", "    To:"))
@@ -112,8 +134,19 @@ class Ui_MainWindow(object):
 
 
     def showDialog(self):
-        print("test in showDialog:", Ui_MainWindow.test)
-        num = ForTransferButtonTest.getNum(Ui_MainWindow.test)
+        if not Ui_MainWindow.default:
+            Ui_MainWindow.startDate = self.dateTimeEdit.dateTime()
+            print("from:", Ui_MainWindow.startDate.toString('yyyy:MM:dd hh:mm:ss'))
+            Ui_MainWindow.endDate = self.dateTimeEdit_2.dateTime()
+            print("to: ", Ui_MainWindow.endDate.toString('yyyy:MM:dd hh:mm:ss'))
+        else:
+            # Ui_MainWindow.startDate = self.dateTimeEdit.dateTime()
+            print("from:", Ui_MainWindow.startDate)
+            Ui_MainWindow.endDate = QDateTime.currentDateTime()
+            print("to: ",Ui_MainWindow.endDate.toString('yyyy:MM:dd hh:mm:ss'))
+
+        print("test in showDialog:", Ui_MainWindow.filePath)
+        message, num = ForTransferButtonTest.main(Ui_MainWindow.filePath)
         progress = QtWidgets.QProgressDialog()
         progress.setWindowTitle("Please wait...")
         progress.setLabelText("Uploading...")
@@ -123,7 +156,9 @@ class Ui_MainWindow(object):
         progress.setRange(0, num)
         for i in range(num):
             progress.setValue(i)
-            message = ForTransferButtonTest.main(Ui_MainWindow.test)
+            # message = ForTransferButtonTest.main(Ui_MainWindow.filePath)
+
+            # for debug only
             # message = "The file inputted into the program can not be found within the path"
             if progress.wasCanceled():
                 QtWidgets.QMessageBox.warning(None, "Error", "Canceled", QtWidgets.QMessageBox.Yes)
@@ -143,5 +178,15 @@ class Ui_MainWindow(object):
                                                   "(*.csv);;Python Files (*.py)", options=options)
         if fileName:
             print("get from dialog:", fileName)
-            Ui_MainWindow.test = fileName
-            print("test:", Ui_MainWindow.test)
+            Ui_MainWindow.filePath = fileName
+            print("test:", Ui_MainWindow.filePath)
+
+    def check1(self):
+        if self.radioButton.isChecked():
+            self.radioButton_2.setChecked(False)
+            Ui_MainWindow.default = False
+
+    def check2(self):
+        if self.radioButton_2.isChecked():
+            self.radioButton.setChecked(False)
+            Ui_MainWindow.default = True

@@ -30,13 +30,14 @@ def main(file_path):
         # CSV Source
         # file_name = '/Users/joviwyel/UCI/2021_Fall/INF117/qualtrics_survey.csv'
         file_name = file_path
+        num = 0
         with open(file_name, newline='') as csv_file:
             reader = csv.DictReader(csv_file)
             count = 0
 
             for row in reader:
                 if (count >= 2):  # row 0-1 are headers
-
+                    num += 1
                     json_dict = {"CONTACT_ID": None, "FIRST_NAME": row['Contact_1']}
                     json_dict['CUSTOMFIELDS'] = []
                     json_dict2 = {}
@@ -92,4 +93,4 @@ def main(file_path):
             message = "There has been a CSV error"
         # system.exit('file {}, line {}: {}'.format(file_name, reader.line_num, e))
 
-    return message
+    return message, num
