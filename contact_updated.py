@@ -246,13 +246,75 @@ with open(file_name, newline='') as csv_file:
                     json_dict['CUSTOMFIELDS'].append(json_dict2['CUSTOMFIELDS'])
 
                 # AREA 7: Organization
+                if (row['Organization 1_1']):
+                    json_dict['ORGANISATION_ID'] = 124215348      
                 
-                
-                # AREA 8: Misc.
+                # AREA 8: WAYFINDER and L&L   
+                # eir_role = []    
+                # if (row['AI Opp']):
+                #     eir_role.extend(row['AI Opp'].split(","))
+                # if (row['Wayfinder Opps']):
+                #     eir_role.extend(row['Wayfinder Opp'].split(","))
+                # eir_role = list(set(eir_workshop)) # remove duplicated
+                # eir_role_decoder = {
+                #         ii:";Wayfinder app consultant"
+                #         ,iii:";Wayfinder admission interviewer"
+                #         ,iv:";Wayfinder orientation leader"
+                #         ,2&v:";Wayfinder advisor;Wayfinder instructor"
+                #         ,vi:";Wayfinder reviewer;Wayfinder contributor"
+                #         ,3:";Grant proposal reviewer"
+                #         ,5:";Campus resource"
+                #         ,6:";Competition judge"
+                #         ,7:";Campus team mentor"
+                #         ,8:";General coach"
+                #         ,4:";Lunch and Learn speaker"
+                # }
+                #"CUSTOM_FIELD_ID":"EiR_Desired_Role_From_Survey__c"
+                    
+                if (row['Wayfinder Workshop']):
+                    eir_workshop = []  
+                    eir_workshop.extend(row['Wayfinder Workshop'].split(","))
+                    eir_workshop = list(set(eir_workshop)) # remove duplicated
+                    eir_workshop_decoder = {
+                        1:";Legal basics" 
+                        ,2:";Finance and accounting fundamentals"
+                        ,3:";Team formation"
+                        ,4:";Market validation"
+                        ,5:";Sales and marketing"
+                        ,6:";Presentation and pitching skills"
+                        ,7:";Soft skills and networking"
+                        ,8:";Design thinking"
+                        ,9:";Funding sources"
+                        ,10:";Tech basics / entrepreneur tools"
+                        ,11:"Others" # manually added this, not in selection for Insightly
+                    }
+                    str1 = ""
+                    for i in eir_workshop:
+                        if (i != '11'):
+                            str1 += eir_workshop_decoder[int(i)]
+                        else: # "Other, please specify:"
+                            if (row['Wayfinder Workshop_11_TEXT']):
+                                json_dict2['CUSTOMFIELDS'] = {}
+                                json_dict2['CUSTOMFIELDS']['FIELD_NAME'] = 'CONTACT_FIELD_126'
+                                json_dict2['CUSTOMFIELDS']['FIELD_VALUE'] = row['Wayfinder Workshop_11_TEXT']
+                                json_dict2['CUSTOMFIELDS']['CUSTOM_FIELD_ID'] = 'CONTACT_FIELD_126'
+                                json_dict['CUSTOMFIELDS'].append(json_dict2['CUSTOMFIELDS'])
+                    json_dict2['CUSTOMFIELDS'] = {}
+                    json_dict2['CUSTOMFIELDS']['FIELD_NAME'] = 'EiR_Potential_Workshop_Presenter__c'
+                    json_dict2['CUSTOMFIELDS']['FIELD_VALUE'] = str1
+                    json_dict2['CUSTOMFIELDS']['CUSTOM_FIELD_ID'] = 'EiR_Potential_Workshop_Presenter__c'
+                    json_dict['CUSTOMFIELDS'].append(json_dict2['CUSTOMFIELDS'])
+                    
+                if (row['L&L']):
+                    json_dict2['CUSTOMFIELDS'] = {}
+                    json_dict2['CUSTOMFIELDS']['FIELD_NAME'] = 'CONTACT_FIELD_146'
+                    json_dict2['CUSTOMFIELDS']['FIELD_VALUE'] = row['L&L']
+                    json_dict2['CUSTOMFIELDS']['CUSTOM_FIELD_ID'] = 'CONTACT_FIELD_146'
+                    json_dict['CUSTOMFIELDS'].append(json_dict2['CUSTOMFIELDS'])
                 
                 #print(json_dict)
                 # POST CSV data to Insightly   
-                #r = requests.get(insightlyAPIurl + '/Contacts/333977981', auth=(insightlyAPIkey, ''))   
+                #r = requests.get(insightlyAPIurl + '/Contacts/333978855', auth=(insightlyAPIkey, ''))   
                 r = requests.post(insightlyAPIurl + '/Contacts', json=json_dict, auth=(insightlyAPIkey, ''))
                 print(r.text)
                 imported_count += 1
@@ -264,5 +326,3 @@ with open(file_name, newline='') as csv_file:
         
     except csv.Error as e:  # display error
         sys.exit('file {}, line {}: {}'.format(file_name, reader.line_num, e))
-
-
