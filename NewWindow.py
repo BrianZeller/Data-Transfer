@@ -14,8 +14,6 @@ from PyQt5.QtCore import Qt
 import ForTransferButtonTest
 
 
-
-
 class Ui_MainWindow(object):
     test = ""
     testNum = 0
@@ -25,9 +23,6 @@ class Ui_MainWindow(object):
         MainWindow.resize(613, 440)
         self.centralwidget = QtWidgets.QWidget(MainWindow)
         self.centralwidget.setObjectName("centralwidget")
-        self.dateTimeEdit = QtWidgets.QDateTimeEdit(self.centralwidget)
-        self.dateTimeEdit.setGeometry(QtCore.QRect(240, 120, 194, 24))
-        self.dateTimeEdit.setObjectName("dateTimeEdit")
         self.pushButton = QtWidgets.QPushButton(self.centralwidget)
         self.pushButton.setGeometry(QtCore.QRect(100, 290, 141, 41))
         self.pushButton.setObjectName("pushButton")
@@ -43,15 +38,39 @@ class Ui_MainWindow(object):
         font.setPointSize(32)
         self.label_2.setFont(font)
         self.label_2.setObjectName("label_2")
-        self.label_4 = QtWidgets.QLabel(self.centralwidget)
-        self.label_4.setGeometry(QtCore.QRect(190, 120, 60, 16))
+        self.widget = QtWidgets.QWidget(self.centralwidget)
+        self.widget.setGeometry(QtCore.QRect(160, 117, 255, 22))
+        self.widget.setObjectName("widget")
+        self.gridLayout_2 = QtWidgets.QGridLayout(self.widget)
+        self.gridLayout_2.setContentsMargins(0, 0, 0, 0)
+        self.gridLayout_2.setObjectName("gridLayout_2")
+        self.radioButton_2 = QtWidgets.QRadioButton(self.widget)
+        self.radioButton_2.setObjectName("radioButton_2")
+        self.gridLayout_2.addWidget(self.radioButton_2, 0, 0, 1, 1)
+        self.label = QtWidgets.QLabel(self.widget)
+        self.label.setObjectName("label")
+        self.gridLayout_2.addWidget(self.label, 0, 1, 1, 1)
+        self.widget1 = QtWidgets.QWidget(self.centralwidget)
+        self.widget1.setGeometry(QtCore.QRect(160, 160, 313, 61))
+        self.widget1.setObjectName("widget1")
+        self.gridLayout = QtWidgets.QGridLayout(self.widget1)
+        self.gridLayout.setContentsMargins(0, 0, 0, 0)
+        self.gridLayout.setObjectName("gridLayout")
+        self.radioButton = QtWidgets.QRadioButton(self.widget1)
+        self.radioButton.setObjectName("radioButton")
+        self.gridLayout.addWidget(self.radioButton, 0, 0, 1, 1)
+        self.label_4 = QtWidgets.QLabel(self.widget1)
         self.label_4.setObjectName("label_4")
-        self.label_5 = QtWidgets.QLabel(self.centralwidget)
-        self.label_5.setGeometry(QtCore.QRect(190, 190, 60, 16))
+        self.gridLayout.addWidget(self.label_4, 0, 1, 1, 1)
+        self.dateTimeEdit = QtWidgets.QDateTimeEdit(self.widget1)
+        self.dateTimeEdit.setObjectName("dateTimeEdit")
+        self.gridLayout.addWidget(self.dateTimeEdit, 0, 2, 1, 1)
+        self.label_5 = QtWidgets.QLabel(self.widget1)
         self.label_5.setObjectName("label_5")
-        self.dateTimeEdit_2 = QtWidgets.QDateTimeEdit(self.centralwidget)
-        self.dateTimeEdit_2.setGeometry(QtCore.QRect(240, 180, 194, 24))
+        self.gridLayout.addWidget(self.label_5, 1, 1, 1, 1)
+        self.dateTimeEdit_2 = QtWidgets.QDateTimeEdit(self.widget1)
         self.dateTimeEdit_2.setObjectName("dateTimeEdit_2")
+        self.gridLayout.addWidget(self.dateTimeEdit_2, 1, 2, 1, 1)
         MainWindow.setCentralWidget(self.centralwidget)
         self.menubar = QtWidgets.QMenuBar(MainWindow)
         self.menubar.setGeometry(QtCore.QRect(0, 0, 613, 24))
@@ -72,25 +91,26 @@ class Ui_MainWindow(object):
         # transfer button click event
         self.pushButton.clicked.connect(self.showDialog)
         self.pushButton_2.clicked.connect(self.openFileNameDialog)
-        
-        QtCore.QMetaObject.connectSlotsByName(MainWindow)
+        self.pushButton_3.clicked.connect(MainWindow.close)
 
-        # self.openFileNameDialog()
+        QtCore.QMetaObject.connectSlotsByName(MainWindow)
 
     def retranslateUi(self, MainWindow):
         _translate = QtCore.QCoreApplication.translate
         MainWindow.setWindowTitle(_translate("MainWindow", "MainWindow"))
         self.pushButton.setText(_translate("MainWindow", "Start Transfer"))
         self.pushButton_2.setText(_translate("MainWindow", "Chose CSV File"))
-        self.pushButton_3.setText(_translate("MainWindow", "Terminte"))
-        self.label_2.setText(_translate("MainWindow", "Date Transfer"))
+        self.pushButton_3.setText(_translate("MainWindow", "Exit"))
+        self.label_2.setText(_translate("MainWindow", "Data Transfer"))
+        self.radioButton_2.setText(_translate("MainWindow", "From Last Transfer Date: "))
+        self.label.setText(_translate("MainWindow", "Show date"))
+        self.radioButton.setText(_translate("MainWindow", "Set Timeframe"))
         self.label_4.setText(_translate("MainWindow", "From:"))
-        self.label_5.setText(_translate("MainWindow", "To:"))
+        self.label_5.setText(_translate("MainWindow", "    To:"))
         self.menuFile.setTitle(_translate("MainWindow", "File"))
         self.actionExit.setText(_translate("MainWindow", "Exit"))
-        
-    
-    # TODO:
+
+
     def showDialog(self):
         print("test in showDialog:", Ui_MainWindow.test)
         num = ForTransferButtonTest.getNum(Ui_MainWindow.test)
@@ -125,7 +145,3 @@ class Ui_MainWindow(object):
             print("get from dialog:", fileName)
             Ui_MainWindow.test = fileName
             print("test:", Ui_MainWindow.test)
-
-
-
-
