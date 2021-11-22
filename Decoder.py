@@ -1,5 +1,5 @@
 # Dictionaries that map the industry responses from Qualtrics to the EiR decoder
-industry = {1:8, 2:2, 3:12, 4:13, 5:1, 6:3, 7:4, 8:15, 9:6, 10:11, 12:14, 13:10, 14:5, 15:7}
+industry = {1:8, 2:2, 3:12, 4:13, 5:1, 6:3, 7:4, 8:15, 9:6, 10:11, 11:9, 12:14, 13:10, 14:5, 15:7}
 indAgriculture = {1:(1, "Agricultural Production & Policy") , 2:(4, "Animal Husbandry"), 3:(8, "Desalination"), 4:(7, "Drought Management"), 5:(9, "Environmental Protection"), 6:(11, "Forestry"), 7:(2, "Genetically Modified Crops"), 8:(3, "Green Biotechnology"), 9:(5, "Veterinary Services"), 10:(10, "Waste Management & Recycling"), 11:(6, "Water Management")}
 indCleantech = {1:(12, "Air & Carbon Capture"), 2:(5, "Bioenergy"), 3:(13, "Construction"), 4:(11, "Electric Motors"), 5:(8, "Energy Storage"), 6:(6, "Geothermal"), 7:(10, "Greywater"),  8:(3, "Hydropower"), 9:(9, "Lighting"), 10:(7, "Recycling"), 11:(1, "Renewables"), 12:(4, "Solar Energy"), 13:(2, "Wind Energy")}
 indConsGds = {1:(1, "Automobiles & Parts"), 2:(6, "Clothing & Accessories"), 3:(3, "Consumer Electronics"), 4:(2, "Food & Beverages"), 5:(7, "Footwear"), 6:(8, "Personal & Household Goods"), 7:(4, "Recreational Products"), 8:(5, "Toys")}
