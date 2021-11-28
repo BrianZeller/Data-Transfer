@@ -6,11 +6,11 @@ from PyQt5.QtCore    import *
 
 from NewWindow import Ui_MainWindow
 
-class MyDialog(QDialog):
-    def __init__(self):
-        super().__init__()
-        self.ui = error_UI()
-        self.ui.setupUi(self)
+# class MyDialog(QDialog):
+#     def __init__(self):
+#         super().__init__()
+#         self.ui = error_UI()
+#         self.ui.setupUi(self)
 
 class MyWindow(QMainWindow):
     def __init__(self):
@@ -18,11 +18,11 @@ class MyWindow(QMainWindow):
         self.ui = Ui_MainWindow()
         self.ui.setupUi(self)
 
-
-    def dialogbox(self):
-        self.hide()
-        self.myDialog = MyDialog()
-        self.myDialog.show()
+    #
+    # def dialogbox(self):
+    #     self.hide()
+    #     self.myDialog = MyDialog()
+    #     self.myDialog.show()
 
 if __name__ == '__main__':
     app = QApplication(sys.argv)
