@@ -39,6 +39,13 @@ class Ui_MainWindow(object):
         self.label_2.setGeometry(QtCore.QRect(210, 30, 201, 51))
         font = QtGui.QFont()
         font.setPointSize(32)
+
+        # path label
+        self.label_path = QtWidgets.QLabel(self.centralwidget)
+        self.label_path.setGeometry(QtCore.QRect(100, 230, 500, 51))
+        self.label_path.setObjectName("label_path")
+
+
         self.label_2.setFont(font)
         self.label_2.setObjectName("label_2")
         self.widget = QtWidgets.QWidget(self.centralwidget)
@@ -65,7 +72,6 @@ class Ui_MainWindow(object):
         self.label_4 = QtWidgets.QLabel(self.widget1)
         self.label_4.setObjectName("label_4")
         self.gridLayout.addWidget(self.label_4, 0, 1, 1, 1)
-
 
         self.label_5 = QtWidgets.QLabel(self.widget1)
         self.label_5.setObjectName("label_5")
@@ -132,6 +138,8 @@ class Ui_MainWindow(object):
         self.menuFile.setTitle(_translate("MainWindow", "File"))
         self.actionExit.setText(_translate("MainWindow", "Exit"))
 
+        self.label_path.setText(_translate("MainWindow", "Path:"))
+
 
     def showDialog(self):
         if not Ui_MainWindow.default:
@@ -194,6 +202,8 @@ class Ui_MainWindow(object):
             print("get from dialog:", fileName)
             Ui_MainWindow.filePath = fileName
             print("test:", Ui_MainWindow.filePath)
+
+        self.label_path.setText(Ui_MainWindow.filePath)
 
     def check1(self):
         if self.radioButton.isChecked():
