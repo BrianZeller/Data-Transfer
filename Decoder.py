@@ -106,7 +106,7 @@ def decodeIndustry(rawresponses):
                         subIndustryCode = indConsServSubs[industryCode][subIndustryR][0]
                         industryName =  indConsServSubs[industryCode][subIndustryR][1]
                         industryEiR.append("{:02d}'{:02d}'{:02d} {}".format(categoryCode, industryCode, subIndustryCode, industryName)) 
-
+    industryEiR = sorted(industryEiR, key=lambda x:x[:8])
     # Combines all of the EiR strings created into one singular string that is returned
     return ', '.join(industryEiR)
 
@@ -135,7 +135,7 @@ def decodeSkills(rawresponses):
             skillCode = skillDict[categoryCode][skillR][0]
             skillName = skillDict[categoryCode][skillR][1]
             skillEiR.append("{:02d}|{:02d} {}".format(categoryCode, skillCode, skillName))
-    
+    skillEiR = sorted(skillEiR, key=lambda x:x[:5])
     # Combines all of the EiR strings created into one singular string that is returned
     return ', '.join(skillEiR)
   
