@@ -1,7 +1,7 @@
 # Data-Transfer
 
 ### Authors
-Kai Li Tan
+Kai Li Tan, Jing Wu, Justin Yoo, Brian Zeller, Yuan Wang
 
 ### Usage
 Transfers Qualtrics survey data in a CSV file into the Insightly database.
