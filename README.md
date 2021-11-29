@@ -20,3 +20,4 @@ Transfers the Qualtrics Innovation Advisor Profile Survey data in a CSV file int
 ### Miscellaneous
 - The last updated date time is saved in savedData.txt
 - Local Business Executive and Local Service Provider place holders are in the UCI Affiliation section of contact_updated.py
+- If organization name from Qualtrics is not found in the Organisation database in Insightly, it would not transfer because it needs to link to an existing ORGANISATION_ID.
