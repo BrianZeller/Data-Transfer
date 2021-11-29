@@ -3,20 +3,26 @@ import json
 import csv
 import tkinter as tk
 import Decoder
+import logHandler
 from datetime import datetime
 from tkinter import filedialog
 import sys
 
+logObject = logHandler.LogHandler()
+
 def getNum(file_path):
-    print("getNum is being called")
+    # print("getNum is being called")
     file_name = file_path
-    print("file_path pass in:" , file_path)
-    print("file_name got:" , file_name)
+    # print("file_path pass in:" , file_path)
+    # print("file_name got:" , file_name)
+    row = 0
     count = 0
     with open(file_name, 'r') as f:
         csv_reader = csv.reader(f)
-        for row in csv_reader:
-            count+= 1
+        for rows in csv_reader:
+            if (row >= 2):
+                count += 1
+            row += 1
     return count
     
 def getUCIAffiliation(uci_affiliation, json_dict2):
@@ -101,8 +107,6 @@ def getUCIAffiliation(uci_affiliation, json_dict2):
     return returnJsonDict
 
 def academicDecoder(academic_area, json_dict2):
-    returnJsonDict = []
-    academic_area = list(set(academic_area))  # remove duplicated
     academic_decoder = {
         1: ";Claire Trevor School of the Arts"
         , 2: ";Francisco J. Ayala School of Biological Sciences"
@@ -134,56 +138,43 @@ def academicDecoder(academic_area, json_dict2):
     json_dict2['CUSTOMFIELDS']['FIELD_NAME'] = 'UCI_unit__c'
     json_dict2['CUSTOMFIELDS']['FIELD_VALUE'] = str1
     json_dict2['CUSTOMFIELDS']['CUSTOM_FIELD_ID'] = 'UCI_unit__c'
-    returnJsonDict.append(json_dict2['CUSTOMFIELDS'])
-    return returnJsonDict
+    return json_dict2['CUSTOMFIELDS']
 
-def getOrganization(insightlyAPIurl, insightlyAPIkey, organizationResponses, json_dict2):
-    returnJsonDict = []
+def getOrganization(insightlyAPIurl, insightlyAPIkey, organizationResponses, rownum):
+    organization_id = None
     r = requests.get(
         insightlyAPIurl + '/Organisations/Search?field_name=ORGANISATION_NAME&field_value=' + organizationResponses + '&brief=false&count_total=false', auth=(insightlyAPIkey, ''))
     organization_json = r.json()
-    if (organization_json):  # if list is not empty, it means ORGANISATION_ID exists
+    if (organization_json): # if list is  not empty, it means ORGANISATION_ID exists
         organization_json = organization_json[0]  # first item in list is the organization dict
-        json_dict2['CUSTOMFIELDS'] = {}
-        json_dict2['CUSTOMFIELDS']['FIELD_NAME'] = 'ORGANISATION_ID'
-        json_dict2['CUSTOMFIELDS']['FIELD_VALUE'] = int(organization_json['ORGANISATION_ID'])
-        json_dict2['CUSTOMFIELDS']['CUSTOM_FIELD_ID'] = 'ORGANISATION_ID'
-        returnJsonDict.append(json_dict2['CUSTOMFIELDS'])
+        organization_id = int(organization_json['ORGANISATION_ID'])
+        # json_dict2['CUSTOMFIELDS'] = {}
+        # json_dict2['CUSTOMFIELDS']['FIELD_NAME'] = 'ORGANISATION_ID'
+        # json_dict2['CUSTOMFIELDS']['FIELD_VALUE'] = int(organization_json['ORGANISATION_ID'])
+        # json_dict2['CUSTOMFIELDS']['CUSTOM_FIELD_ID'] = 'ORGANISATION_ID'
+    else:
+        logObject.writeNotification(rownum, "organization not found")
     # Print log statement that Organization does not exist in Insightly
     
     # else:
     #     print('Organization name not found for ORGANISATION_NAME: ' + row['Organization 1_1']) 
-    return returnJsonDict 
-
-def getTitle(titleResponses, json_dict2):
-    returnJsonDict = []
-    json_dict2['CUSTOMFIELDS'] = {}
-    json_dict2['CUSTOMFIELDS']['FIELD_NAME'] = 'TITLE'
-    json_dict2['CUSTOMFIELDS']['FIELD_VALUE'] = titleResponses['Organization 1_2']
-    json_dict2['CUSTOMFIELDS']['CUSTOM_FIELD_ID'] = 'TITLE'
-    returnJsonDict.append(json_dict2['CUSTOMFIELDS'])
-    return returnJsonDict
+    return organization_id
 
 def getIndustryEiR(industryResponses, json_dict2):
-    returnJsonDict = []
     json_dict2['CUSTOMFIELDS'] = {}
     json_dict2['CUSTOMFIELDS']['FIELD_NAME'] = 'CONTACT_FIELD_127'
     json_dict2['CUSTOMFIELDS']['FIELD_VALUE'] = Decoder.decodeIndustry(industryResponses)
     json_dict2['CUSTOMFIELDS']['CUSTOM_FIELD_ID'] = 'CONTACT_FIELD_127'
-    returnJsonDict.append(json_dict2['CUSTOMFIELDS'])
-    return returnJsonDict
+    return json_dict2['CUSTOMFIELDS']
 
 def getSkillEiR(skillResponses, json_dict2):
-    returnJsonDict = []
     json_dict2['CUSTOMFIELDS'] = {}
     json_dict2['CUSTOMFIELDS']['FIELD_NAME'] = 'CONTACT_FIELD_128'
     json_dict2['CUSTOMFIELDS']['FIELD_VALUE'] = Decoder.decodeSkills(skillResponses)
     json_dict2['CUSTOMFIELDS']['CUSTOM_FIELD_ID'] = 'CONTACT_FIELD_128'
-    returnJsonDict.append(json_dict2['CUSTOMFIELDS'])
-    return returnJsonDict
+    return json_dict2['CUSTOMFIELDS']
 
 def getGender(genderResponses, json_dict2):
-    returnJsonDict = []
     gender_decoder = {
         1: "Male"
         , 2: "Female"
@@ -194,11 +185,9 @@ def getGender(genderResponses, json_dict2):
     json_dict2['CUSTOMFIELDS']['FIELD_NAME'] = 'Gender__c'
     json_dict2['CUSTOMFIELDS']['FIELD_VALUE'] = gender_decoder[int(genderResponses)]
     json_dict2['CUSTOMFIELDS']['CUSTOM_FIELD_ID'] = 'Gender__c'
-    returnJsonDict.append(json_dict2['CUSTOMFIELDS'])
-    return returnJsonDict
+    return json_dict2['CUSTOMFIELDS']
 
 def getEthnicity(ethnicityResponses, json_dict2):
-    returnJsonDict = []
     ethnicity = []
     ethnicity.extend(ethnicityResponses.split(","))
     ethnicity = list(set(ethnicity))  # remove duplicated
@@ -219,16 +208,14 @@ def getEthnicity(ethnicityResponses, json_dict2):
     json_dict2['CUSTOMFIELDS']['FIELD_NAME'] = 'Ethnicity__c'
     json_dict2['CUSTOMFIELDS']['FIELD_VALUE'] = str1
     json_dict2['CUSTOMFIELDS']['CUSTOM_FIELD_ID'] = 'Ethnicity__c'
-    returnJsonDict.append(json_dict2['CUSTOMFIELDS'])    
-    return returnJsonDict
+    return json_dict2['CUSTOMFIELDS']
 
 def getAcademicOther(academicOtherText, json_dict2):
-    returnJsonDict = []
     json_dict2['CUSTOMFIELDS'] = {}
     json_dict2['CUSTOMFIELDS']['FIELD_NAME'] = 'CONTACT_FIELD_151'
     json_dict2['CUSTOMFIELDS']['FIELD_VALUE'] = academicOtherText
     json_dict2['CUSTOMFIELDS']['CUSTOM_FIELD_ID'] = 'CONTACT_FIELD_151'
-    returnJsonDict.append(json_dict2['CUSTOMFIELDS'])
+    return json_dict2['CUSTOMFIELDS']
 
 def getMotivations(motivationValues, json_dict2):
     returnJsonDict = []
@@ -270,7 +257,6 @@ def getMotivations(motivationValues, json_dict2):
     return returnJsonDict
 
 def getAcademicBackground(academicInfo, json_dict2):
-    returnJsonDict = []
     background = academicInfo[0] + ' - ' + academicInfo[1] + ' - ' + academicInfo[2]
     if (academicInfo[3]):
         background += '; ' + academicInfo[3] + ' - ' + academicInfo[4] + ' - ' + academicInfo[5]
@@ -282,9 +268,8 @@ def getAcademicBackground(academicInfo, json_dict2):
     json_dict2['CUSTOMFIELDS']['FIELD_NAME'] = 'CONTACT_FIELD_129'
     json_dict2['CUSTOMFIELDS']['FIELD_VALUE'] = background
     json_dict2['CUSTOMFIELDS']['CUSTOM_FIELD_ID'] = 'CONTACT_FIELD_129'
-    returnJsonDict.append(json_dict2['CUSTOMFIELDS'])
     
-    return returnJsonDict
+    return json_dict2['CUSTOMFIELDS']
 
 def getAdditionalContactInfo(contactInfo, json_dict2):
     returnJsonDict = []
@@ -310,13 +295,11 @@ def getAdditionalContactInfo(contactInfo, json_dict2):
     return returnJsonDict
 
 def getUCIStaff(uci_staff_str, json_dict2):
-    returnJsonDict = []
     json_dict2['CUSTOMFIELDS'] = {}
     json_dict2['CUSTOMFIELDS']['FIELD_NAME'] = 'CONTACT_FIELD_142'
     json_dict2['CUSTOMFIELDS']['FIELD_VALUE'] = uci_staff_str
     json_dict2['CUSTOMFIELDS']['CUSTOM_FIELD_ID'] = 'CONTACT_FIELD_142'
-    returnJsonDict.append(json_dict2['CUSTOMFIELDS'])
-    return returnJsonDict
+    return json_dict2['CUSTOMFIELDS']
 
 def getWorkshop(workshop, json_dict2):
     returnJsonDict = []
@@ -337,6 +320,7 @@ def getWorkshop(workshop, json_dict2):
         , 11: "Others"  # manually added this, not in selection for Insightly
     }
     str1 = ""
+
     for i in eir_workshop:
         if (i != '11'):
             str1 += eir_workshop_decoder[int(i)]
@@ -355,13 +339,11 @@ def getWorkshop(workshop, json_dict2):
     return returnJsonDict
 
 def getLL(llResponses, json_dict2):
-    returnJsonDict = []
     json_dict2['CUSTOMFIELDS'] = {}
     json_dict2['CUSTOMFIELDS']['FIELD_NAME'] = 'CONTACT_FIELD_146'
     json_dict2['CUSTOMFIELDS']['FIELD_VALUE'] = llResponses
     json_dict2['CUSTOMFIELDS']['CUSTOM_FIELD_ID'] = 'CONTACT_FIELD_146'
-    returnJsonDict.append(json_dict2['CUSTOMFIELDS'])
-    return returnJsonDict
+    return json_dict2['CUSTOMFIELDS']
 
 def getAIOpp(Opp, json_dict2):
     returnJsonDict = []
@@ -399,8 +381,7 @@ def getAIOpp(Opp, json_dict2):
     json_dict2['CUSTOMFIELDS']['FIELD_NAME'] = 'EiR_Desired_Role_From_Survey__c'
     json_dict2['CUSTOMFIELDS']['FIELD_VALUE'] = str1
     json_dict2['CUSTOMFIELDS']['CUSTOM_FIELD_ID'] = 'EiR_Desired_Role_From_Survey__c'
-    returnJsonDict.append(json_dict2['CUSTOMFIELDS'])
-    return returnJsonDict  
+    return json_dict2['CUSTOMFIELDS']
 
 def main(file_path, rownum, start, end):
     # error message pass back to window
@@ -413,7 +394,7 @@ def main(file_path, rownum, start, end):
     try:
         # CSV Source
         file_name = file_path
-
+        imported_count = 0
         # Get last saved datetime
         with open("savedData.txt", "r") as file:
             saveddate = file.readline()
@@ -424,18 +405,18 @@ def main(file_path, rownum, start, end):
             #     lastdate = datetime.strptime(saveddate, '%Y-%m-%d %H:%M:%S')
             #     useLastDate = 1
             # file.close()
-
+            
         # Get data from CSV and transfer
         with open(file_name, newline="") as csv_file:
             reader = csv.DictReader(csv_file)
-            imported_count = 0
             for i, rows in enumerate(reader):
                 if i == rownum:
                     row = rows
-                    print(rownum, row)
+                    # print(rownum, row)
 
             if int(row["Progress"]) != 100:
-                print("progress return")
+                #print("progress return")
+                logObject.writeIncompleteResponse(rownum, row["Progress"])
                 return message, imported_count
             # convert start and end time
             start_date = datetime.strptime(start, '%Y-%m-%d %H:%M:%S')
@@ -447,7 +428,13 @@ def main(file_path, rownum, start, end):
             try:
                 date_time_obj = datetime.strptime(row["RecordedDate"], '%Y-%m-%d %H:%M:%S')
             except ValueError:
-                date_time_obj = datetime.strptime(row["RecordedDate"], '%m/%d/%Y %H:%M')
+                try:
+                    date_time_obj = datetime.strptime(row["RecordedDate"], '%m/%d/%Y %H:%M')
+                except Exception as e:
+                    logObject.writeError(rownum, e, "was encountered when converting date formats")
+                    return message, imported_count # Message?
+            
+
             # if useLastDate:
             # if lastdate >= date_time_obj:
             #     print("lastdate return")
@@ -455,6 +442,7 @@ def main(file_path, rownum, start, end):
             
             # check time frame
             if start_date >= date_time_obj or end_date < date_time_obj:
+                logObject.writeNotInDateRange(rownum)
                 # print("start_date:", start_date)
                 # print("date:", date_time_obj)
                 # print("end_date:", end_date)
@@ -466,7 +454,7 @@ def main(file_path, rownum, start, end):
 
             # Section 1: Involvement Opportunities
             if (row['AI Opp']):
-                Opp = [row['AIOpp'], row['Wayfinder Opps']]
+                Opp = [row['AI Opp'], row['Wayfinder Opps']]
                 json_dict['CUSTOMFIELDS'].append(getAIOpp(Opp, json_dict2))
 
             if (row['Wayfinder Workshop']):
@@ -491,10 +479,10 @@ def main(file_path, rownum, start, end):
 
             # Section 5: Career Background
             if (row['Organization 1_1']):
-                json_dict['CUSTOMFIELDS'].append(getOrganization(insightlyAPIurl, insightlyAPIkey,row['Organization 1_1'],json_dict2))
+                json_dict['ORGANISATION_ID'] = getOrganization(insightlyAPIurl, insightlyAPIkey, row['Organization 1_1'], rownum)
                 
             if (row['Organization 1_2']):
-                json_dict['CUSTOMFIELDS'].append(getTitle(row['Organization 1_2'],json_dict2))
+                json_dict['TITLE'] = row['Organization 1_2']
 
             # Section 6: Academic Background (Brian)
             if (row['Degree 1_1']):
@@ -529,10 +517,10 @@ def main(file_path, rownum, start, end):
                 
             # Section 7: Demographics
             if (row['Q100']):
-                json_dict['CUSTOMFIELDS'].append(getGender(json_dict2['CUSTOMFIELDS'], json_dict2))
+                json_dict['CUSTOMFIELDS'].append(getGender(row['Q100'], json_dict2))
                 
             if (row['Q102']):
-                json_dict['CUSTOMFIELDS'].append(getEthnicity(json_dict2['CUSTOMFIELDS'], json_dict2))
+                json_dict['CUSTOMFIELDS'].append(getEthnicity(row['Q102'], json_dict2))
 
             # Section 7: UCI Affiliation
             if row['UCI Affiliation']:
@@ -556,7 +544,10 @@ def main(file_path, rownum, start, end):
 
             # Transfer CSV data into Insightly
             # r = requests.post(insightlyAPIurl + '/Contacts', json=json_dict, auth=(insightlyAPIkey, ''))
-            # r = requests.get(insightlyAPIurl + '/Contacts/334147561', auth=(insightlyAPIkey, ''))
+            # if r.status_code != 200:
+            #     logObject.writePostFailure(rownum, r.status_code)
+            # else:
+            #     logObject.writePostSuccess(rownum)
             imported_count += 1
 
             # # Close savedData file
@@ -564,15 +555,17 @@ def main(file_path, rownum, start, end):
             #     file.write(datetime.strftime(date_time_obj, '%Y-%m-%d %H:%M:%S'))
             #     file.close()
 
-            print(imported_count, "row(s) of data has been transferred successfully.")
+            print(json_dict)
+
+            # print(imported_count, "row(s) of data has been transferred successfully.")
 
 
     except (csv.Error, FileNotFoundError) as e:  # display error
         if type(e) is FileNotFoundError:
             message = "The file inputted into the program can not be found within the path"
-
         else:
             message = "There has been a CSV error"
+        logObject.writeError(rownum, e, message)
 
     return message, imported_count
 
