@@ -103,7 +103,8 @@ def getUCIAffiliation(uci_affiliation, json_dict2):
             #     json_dict2['CUSTOMFIELDS']['FIELD_NAME'] = 'CONTACT_FIELD_xxx'
             #     json_dict2['CUSTOMFIELDS']['FIELD_VALUE'] = True
             #     json_dict2['CUSTOMFIELDS']['CUSTOM_FIELD_ID'] = 'CONTACT_FIELD_xxx'
-            #     json_dict['CUSTOMFIELDS'].append(json_dict2['CUSTOMFIELDS'])
+            #     json_dict['CUSTOMFIELDS'].append(json_dict2['CUSTOMFIELDS']
+
     return returnJsonDict
 
 def academicDecoder(academic_area, json_dict2):
@@ -525,7 +526,10 @@ def main(file_path, rownum, start, end):
             # Section 7: UCI Affiliation
             if row['UCI Affiliation']:
                 uci_affiliation = row['UCI Affiliation'].split(",")
-                json_dict['CUSTOMFIELDS'].append(getUCIAffiliation(uci_affiliation, json_dict2))
+                json_dict['CUSTOMFIELDS'].extend(getUCIAffiliation(uci_affiliation, json_dict2))
+                # affiliationList = getUCIAffiliation(uci_affiliation,json_dict2) #list(Dictionary) -> add dictionary into json_dict['CUSTOMFIELDS']
+                # for indx, i in enumerate(affiliationList):
+                #     json_dict['CUSTOMFIELDS'].append(indx, i)
                 
             academic_area = []
             if (row['UCI Student']):
@@ -543,7 +547,10 @@ def main(file_path, rownum, start, end):
                 json_dict['CUSTOMFIELDS'].append(getUCIStaff(uci_staff_str, json_dict2))
 
             # Transfer CSV data into Insightly
-            # r = requests.post(insightlyAPIurl + '/Contacts', json=json_dict, auth=(insightlyAPIkey, ''))
+            print(json_dict)
+            r = requests.post(insightlyAPIurl + '/Contacts', json=json_dict, auth=(insightlyAPIkey, ''))
+            #r = requests.get(insightlyAPIurl + '/Contacts/226834731', auth=(insightlyAPIkey, ''))
+            print(r.text) 
             # if r.status_code != 200:
             #     logObject.writePostFailure(rownum, r.status_code)
             # else:
@@ -554,8 +561,6 @@ def main(file_path, rownum, start, end):
             # with open("savedData.txt", "w+") as file:
             #     file.write(datetime.strftime(date_time_obj, '%Y-%m-%d %H:%M:%S'))
             #     file.close()
-
-            print(json_dict)
 
             # print(imported_count, "row(s) of data has been transferred successfully.")
 
