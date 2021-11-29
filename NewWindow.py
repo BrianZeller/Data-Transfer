@@ -1,4 +1,4 @@
-<<<<<<< HEAD
+
 # -*- coding: utf-8 -*-
 
 # Form implementation generated from reading ui file 'NewWindow.ui'
@@ -217,7 +217,7 @@ class Ui_MainWindow(object):
     def check2(self):
         if self.radioButton_2.isChecked():
             self.radioButton.setChecked(False)
-=======
+
 # -*- coding: utf-8 -*-
 
 # Form implementation generated from reading ui file 'NewWindow.ui'
@@ -434,5 +434,4 @@ class Ui_MainWindow(object):
     def check2(self):
         if self.radioButton_2.isChecked():
             self.radioButton.setChecked(False)
->>>>>>> 49dce2a69834d397158eaa91ec8e9f71f92538a8
             Ui_MainWindow.default = True
