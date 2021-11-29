@@ -4,7 +4,7 @@
 Kai Li Tan, Jing Wu, Justin Yoo, Brian Zeller, Yuan Wang
 
 ### Usage
-Transfers the Qualtrics Innovation Advisor Profile Survey data in a CSV file into the Insightly Contacts database.
+Transfers the Innovation Advisor Profile Survey data in a CSV file exported from Qualtrics into the Insightly Contacts database.
 
 ### How-to-Use
 1. Run prototype.py 
