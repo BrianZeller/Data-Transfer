@@ -44,7 +44,7 @@ if (row['FIELD_NAME_IN_CSV']):
     json_dict['CUSTOMFIELDS'].append(getField(row['FIELD_NAME_IN_CSV'], json_dict2))
 ```
 3. Integer 
-For example: 'CONTACT_FIELD_92' (Motivation_1), 'CONTACT_FIELD_93' (Motivation_2)
+- For example: 'CONTACT_FIELD_92' (Motivation_1), 'CONTACT_FIELD_93' (Motivation_2)
 ```
 def getField(field_value, json_dict2):
     json_dict2['CUSTOMFIELDS'] = {}
