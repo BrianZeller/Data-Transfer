@@ -1,7 +1,6 @@
 import sys
 from PyQt5.QtWidgets import *
-from PyQt5.QtGui     import *
-from PyQt5.QtCore    import *
+from PyQt5 import QtCore, QtGui, QtWidgets
 
 
 from NewWindow import Ui_MainWindow
@@ -25,6 +24,7 @@ class MyWindow(QMainWindow):
     #     self.myDialog.show()
 
 if __name__ == '__main__':
+    QtWidgets.QApplication.setAttribute(QtCore.Qt.AA_EnableHighDpiScaling, True)
     app = QApplication(sys.argv)
     w = MyWindow()
     w.show()
