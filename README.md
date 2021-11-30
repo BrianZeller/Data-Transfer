@@ -66,6 +66,28 @@ if (row['FIELD_NAME_IN_CSV']):
     json_dict['CUSTOMFIELDS'].append(getField(row['FIELD_NAME_IN_CSV'], json_dict2))
 ```
 5. Multiple Choice in Dropdown
+```
+def getField(field_value, json_dict2):
+    field_list = []
+    field_list.extend(field_value.split(","))
+    field_list = list(set(ethnicity))  # remove duplicated
+    field_decoder = {
+        1: ";Option A"
+        , 2: ";Option B"
+        , 3: ";Option C"
+    }
+    str1 = ""
+    for i in field_list:
+        str1 += field_decoder[int(i)]
+    json_dict2['CUSTOMFIELDS'] = {}
+    json_dict2['CUSTOMFIELDS']['FIELD_NAME'] = 'FIELD_NAME_IN_INSIGHTLY'
+    json_dict2['CUSTOMFIELDS']['FIELD_VALUE'] = str1
+    json_dict2['CUSTOMFIELDS']['CUSTOM_FIELD_ID'] = 'FIELD_NAME_IN_INSIGHTLY'
+    return json_dict2['CUSTOMFIELDS']
+
+if (row['FIELD_NAME_IN_CSV']):
+    json_dict['CUSTOMFIELDS'].append(getField(row['FIELD_NAME_IN_CSV'], json_dict2))
+```
 6. Checkbox
 7. Organization related
 
