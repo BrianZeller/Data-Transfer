@@ -1,4 +1,3 @@
-
 # -*- coding: utf-8 -*-
 
 # Form implementation generated from reading ui file 'NewWindow.ui'
@@ -24,7 +23,8 @@ class Ui_MainWindow(object):
 
     def setupUi(self, MainWindow):
         MainWindow.setObjectName("MainWindow")
-        MainWindow.resize(613, 440)
+        MainWindow.resize(660, 440)
+        MainWindow.setFixedSize(660, 440)
         self.centralwidget = QtWidgets.QWidget(MainWindow)
         self.centralwidget.setObjectName("centralwidget")
         self.pushButton = QtWidgets.QPushButton(self.centralwidget)
@@ -34,7 +34,7 @@ class Ui_MainWindow(object):
         self.pushButton_2.setGeometry(QtCore.QRect(260, 290, 141, 41))
         self.pushButton_2.setObjectName("pushButton_2")
         self.pushButton_3 = QtWidgets.QPushButton(self.centralwidget)
-        self.pushButton_3.setGeometry(QtCore.QRect(410, 290, 141, 41))
+        self.pushButton_3.setGeometry(QtCore.QRect(420, 290, 141, 41))
         self.pushButton_3.setObjectName("pushButton_3")
         self.label_2 = QtWidgets.QLabel(self.centralwidget)
         self.label_2.setGeometry(QtCore.QRect(210, 30, 201, 51))
@@ -123,7 +123,6 @@ class Ui_MainWindow(object):
         # read date from txt file
         with open("savedData.txt", 'r') as showDate:
             Ui_MainWindow.startDate = showDate.readline()
-        print(Ui_MainWindow.startDate)
 
         _translate = QtCore.QCoreApplication.translate
         MainWindow.setWindowTitle(_translate("MainWindow", "MainWindow"))
@@ -131,8 +130,9 @@ class Ui_MainWindow(object):
         self.pushButton_2.setText(_translate("MainWindow", "Chose CSV File"))
         self.pushButton_3.setText(_translate("MainWindow", "Exit"))
         self.label_2.setText(_translate("MainWindow", "Data Transfer"))
-        self.radioButton_2.setText(_translate("MainWindow", "From Last Transfer Date: "))
-        self.label.setText(_translate("MainWindow", Ui_MainWindow.startDate))
+        self.label_2.adjustSize()
+        self.radioButton_2.setText(_translate("MainWindow", "From Last Transfer    Date: "))
+        self.label.setText(_translate("MainWindow", "    " + Ui_MainWindow.startDate))
         self.radioButton.setText(_translate("MainWindow", "Set Timeframe"))
         self.label_4.setText(_translate("MainWindow", "From:"))
         self.label_5.setText(_translate("MainWindow", "    To:"))
@@ -157,39 +157,39 @@ class Ui_MainWindow(object):
                 Ui_MainWindow.endDate = QDateTime.currentDateTime().toString('yyyy-MM-dd hh:mm:ss')
                 print("to: ", Ui_MainWindow.endDate)
 
-            print("test in showDialog:", Ui_MainWindow.filePath)
+        print("test in showDialog:", Ui_MainWindow.filePath)
+        
+        num = contact_updated.getNum(Ui_MainWindow.filePath)
+        
+        progress = QtWidgets.QProgressDialog()
+        progress.setWindowTitle("Please wait...")
+        progress.setLabelText("Uploading...")
+        progress.setCancelButtonText("Cancel")
+        progress.setMinimumDuration(5)
+        progress.setWindowModality(Qt.WindowModal)
+        progress.setRange(0, num)
 
-            num = contact_updated.getNum(Ui_MainWindow.filePath)
-
-            progress = QtWidgets.QProgressDialog()
-            progress.setWindowTitle("Please wait...")
-            progress.setLabelText("Uploading...")
-            progress.setCancelButtonText("Cancel")
-            progress.setMinimumDuration(5)
-            progress.setWindowModality(Qt.WindowModal)
-            progress.setRange(0, num)
-
-            temptotal = 0
-            for i in range(2, num-2):
-                progress.setValue(i)
-                # message = ForTransferButtonTest.main(Ui_MainWindow.filePath)
-                message, temp = contact_updated.main(Ui_MainWindow.filePath, i, Ui_MainWindow.startDate, Ui_MainWindow.endDate)
-                temptotal = temptotal + temp
-                # for debug only
-                # message = "The file inputted into the program can not be found within the path"
-                if progress.wasCanceled():
-                    QtWidgets.QMessageBox.warning(None, "Error", "Canceled", QtWidgets.QMessageBox.Yes)
-                    break
-                self.settotal(temptotal)
-            if(message):
-                progress.setValue(num)
-                QtWidgets.QMessageBox.warning(None, "Done", message, QtWidgets.QMessageBox.Yes)
-            else:
-                message = str(Ui_MainWindow.total) + " records has been transferred successfully."
-                progress.setValue(num)
-                self.resettotal()
-                QtWidgets.QMessageBox.information(None, "Done", message, QtWidgets.QMessageBox.Yes)
-                contact_updated.saveDate(Ui_MainWindow.endDate)
+        temptotal = 0
+        for i in range(2, num-2):
+            progress.setValue(i)
+            # message = ForTransferButtonTest.main(Ui_MainWindow.filePath)
+            message, temp = contact_updated.main(Ui_MainWindow.filePath, i, Ui_MainWindow.startDate, Ui_MainWindow.endDate)
+            temptotal = temptotal + temp
+            # for debug only
+            # message = "The file inputted into the program can not be found within the path"
+            if progress.wasCanceled():
+                QtWidgets.QMessageBox.warning(None, "Error", "Canceled", QtWidgets.QMessageBox.Yes)
+                break
+            self.settotal(temptotal)
+        if(message):
+            progress.setValue(num)
+            QtWidgets.QMessageBox.warning(None, "Done", message, QtWidgets.QMessageBox.Yes)
+        else:
+            message = str(Ui_MainWindow.total) + " records has been transferred successfully."
+            progress.setValue(num)
+            self.resettotal()
+            QtWidgets.QMessageBox.information(None, "Done", message, QtWidgets.QMessageBox.Yes)
+            contact_updated.saveDate(Ui_MainWindow.endDate)
 
     def settotal(self, num):
         Ui_MainWindow.total = num
