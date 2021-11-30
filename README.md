@@ -18,10 +18,10 @@ Transfers the Innovation Advisor Profile Survey data in a CSV file exported from
 7. New Contact objects will be created in Insightly
 
 ### Adding New Fields
-- Use the suitable templates below to add new fields into contact_updated according to the value's data type.
-- Replace FIELD_NAME_IN_CSV with the field name in the CSV file which is located at the first row such as 'Degree 1_1' and 'Contact_2'. 
-- Replace FIELD_NAME_IN_INSIGHTLY with the corresponding field name in Insightly such as 'CONTACT_FIELD_129' and 'LAST_NAME'.
-- Replace the function name getField into something more relevant such as getAcademicBackground and getOrganization.
+1. Use the suitable templates below to add new fields into contact_updated according to the value's data type.
+2. Replace FIELD_NAME_IN_CSV with the field name in the CSV file which is located at the first row such as 'Degree 1_1' and 'Contact_2'. 
+3. Replace FIELD_NAME_IN_INSIGHTLY with the corresponding field name in Insightly such as 'CONTACT_FIELD_129' and 'LAST_NAME'.
+4. Replace the function name getField into something more relevant such as getAcademicBackground and getOrganization.
 
 #### Data Types in Insightly:
 1. Text (Insightly Built-In Fields)
