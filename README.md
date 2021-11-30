@@ -18,11 +18,12 @@ Transfers the Innovation Advisor Profile Survey data in a CSV file exported from
 7. New Contact objects will be created in Insightly
 
 ### Adding New Fields
+- Use the suitable templates below to add new fields into contact_updated according to the value's data type.
 - Replace FIELD_NAME_IN_CSV with the field name in the CSV file which is located at the first row such as 'Degree 1_1' and 'Contact_2'. 
 - Replace FIELD_NAME_IN_INSIGHTLY with the corresponding field name in Insightly such as 'CONTACT_FIELD_129' and 'LAST_NAME'.
 - Replace the function name getField into something more relevant such as getAcademicBackground and getOrganization.
 
-Data Types in Insightly:
+#### Data Types in Insightly:
 1. Text (Insightly Built-In Fields)
 ```
 if (row['FIELD_NAME_IN_CSV']):
@@ -105,6 +106,10 @@ if (row['FIELD_NAME_IN_CSV']):
     json_dict['CUSTOMFIELDS'].append(getField(row['FIELD_NAME_IN_CSV'], json_dict2))
 ```
 7. Organization Name
+- An organization name will be passed in into the function. 
+- It will be used to lookup the organization ID in Insightly's Organisation database. 
+- The organization ID would be used to link the Contact object to the Organisation.
+- If organization name from Qualtrics is not found in the Organisation database in Insightly, it would not transfer because it needs to link to an existing ORGANISATION_ID.
 ```
 def getOrganization(insightlyAPIurl, insightlyAPIkey, organizationResponses, rownum):
     organization_id = None
@@ -133,4 +138,3 @@ if (row['FIELD_NAME_IN_CSV']):
 ### Miscellaneous
 - The last updated date time is saved in savedData.txt
 - Local Business Executive and Local Service Provider place holders are in the getUCIAffiliation function of contact_updated.py
-- If organization name from Qualtrics is not found in the Organisation database in Insightly, it would not transfer because it needs to link to an existing ORGANISATION_ID.
