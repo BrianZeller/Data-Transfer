@@ -17,7 +17,31 @@ Transfers the Innovation Advisor Profile Survey data in a CSV file exported from
 6. Once transfer is done, a successful message will appear
 7. New Contact objects will be created in Insightly
 
+### Adding New Fields
+Data Types in Insightly:
+1. Text (Insightly Built-In Fields)
+```
+   if (row['FIELD_NAME_IN_CSV']):
+      json_dict['FIELD_NAME_IN_INSIGHTLY'] = row['FIELD_NAME_IN_CSV']
+```
+2. Text (Custom Fields) 
+```
+def getField(responses, json_dict2):
+    json_dict2['CUSTOMFIELDS'] = {}
+    json_dict2['CUSTOMFIELDS']['FIELD_NAME'] = 'FIELD_NAME_IN_INSIGHTLY'
+    json_dict2['CUSTOMFIELDS']['FIELD_VALUE'] = responses
+    json_dict2['CUSTOMFIELDS']['CUSTOM_FIELD_ID'] = 'FIELD_NAME_IN_INSIGHTLY'
+    return json_dict2['CUSTOMFIELDS']
+if (row['FIELD_NAME_IN_CSV']):
+    json_dict['CUSTOMFIELDS'].append(getField(row['FIELD_NAME_IN_CSV'], json_dict2))
+```
+3. Integer
+4. Single Choice in Dropdown
+5. Multiple Choice in Dropdown
+6. Checkbox
+7. Organization related
+
 ### Miscellaneous
 - The last updated date time is saved in savedData.txt
-- Local Business Executive and Local Service Provider place holders are in the UCI Affiliation section of contact_updated.py
+- Local Business Executive and Local Service Provider place holders are in the getUCIAffiliation function of contact_updated.py
 - If organization name from Qualtrics is not found in the Organisation database in Insightly, it would not transfer because it needs to link to an existing ORGANISATION_ID.
