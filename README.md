@@ -23,7 +23,7 @@ Transfers the Innovation Advisor Profile Survey data in a CSV file exported from
 3. Replace FIELD_NAME_IN_INSIGHTLY with the corresponding field name in Insightly such as 'CONTACT_FIELD_129' and 'LAST_NAME'.
 4. Replace the function name getField into something more relevant such as getAcademicBackground and getOrganization.
 
-### Templates for Different Data Types
+### Templates for Different Data Types in Insightly
 1. Text (Insightly Built-In Fields)
 - For example: 'LAST_NAME', 'PHONE', 'ADDRESS_MAIL_CITY'
 ```
@@ -57,7 +57,7 @@ if (row['FIELD_NAME_IN_CSV']):
     json_dict['CUSTOMFIELDS'].append(getField(row['FIELD_NAME_IN_CSV'], json_dict2))
 ```
 4. Single Choice in Dropdown
-For example: 'Gender__c'
+- For example: 'Gender__c'
 ```
 def getField(field_value, json_dict2):
     field_decoder = {
@@ -75,7 +75,7 @@ if (row['FIELD_NAME_IN_CSV']):
     json_dict['CUSTOMFIELDS'].append(getField(row['FIELD_NAME_IN_CSV'], json_dict2))
 ```
 5. Multiple Choice in Dropdown
-For example: 'Ethnicity__c', 'EiR_Potential_Workshop_Presenter__c', 'EiR_Desired_Role_From_Survey__c'
+- For example: 'Ethnicity__c', 'EiR_Potential_Workshop_Presenter__c', 'EiR_Desired_Role_From_Survey__c'
 ```
 def getField(field_value, json_dict2):
     field_list = []
@@ -99,7 +99,7 @@ if (row['FIELD_NAME_IN_CSV']):
     json_dict['CUSTOMFIELDS'].append(getField(row['FIELD_NAME_IN_CSV'], json_dict2))
 ```
 6. Checkbox
-For example: 'CONTACT_FIELD_154' (UCI student), 'CONTACT_FIELD_133' (UCI Alumni)
+- For example: 'CONTACT_FIELD_154' (UCI student), 'CONTACT_FIELD_133' (UCI Alumni)
 ```
 def getField(field_value, json_dict2):
     json_dict2['CUSTOMFIELDS'] = {}
@@ -112,7 +112,7 @@ if (row['FIELD_NAME_IN_CSV']):
     json_dict['CUSTOMFIELDS'].append(getField(row['FIELD_NAME_IN_CSV'], json_dict2))
 ```
 7. Organization Name
-For example: 'ORGANISATION_ID'
+- For example: 'ORGANISATION_ID'
 - An organization name will be passed in into the function. 
 - It will be used to lookup the organization ID in Insightly's Organisation database. 
 - The organization ID would be used to link the Contact object to the Organisation.
