@@ -112,13 +112,20 @@ def getOrganization(insightlyAPIurl, insightlyAPIkey, organizationResponses, row
         organization_id = int(organization_json['ORGANISATION_ID'])
     else:
         logObject.writeNotification(rownum, "Organization name is not found in Insightly Organisation database")
-    # Print log statement that Organization does not exist in Insightly
+        # Print log statement that Organization does not exist in Insightly
     return organization_id
 
-if (row['Organization 1_1']):
-    json_dict['ORGANISATION_ID'] = getOrganization(insightlyAPIurl, insightlyAPIkey, row['Organization 1_1'], rownum)
+if (row['FIELD_NAME_IN_CSV']):
+    json_dict['ORGANISATION_ID'] = getOrganization(insightlyAPIurl, insightlyAPIkey, row['FIELD_NAME_IN_CSV'], rownum)
+```
+8. Industry EiR
 ```
 
+```
+9. Skills EiR
+```
+
+```
 ### Miscellaneous
 - The last updated date time is saved in savedData.txt
 - Local Business Executive and Local Service Provider place holders are in the getUCIAffiliation function of contact_updated.py
