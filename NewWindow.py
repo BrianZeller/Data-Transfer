@@ -157,39 +157,39 @@ class Ui_MainWindow(object):
                 Ui_MainWindow.endDate = QDateTime.currentDateTime().toString('yyyy-MM-dd hh:mm:ss')
                 print("to: ", Ui_MainWindow.endDate)
 
-        print("test in showDialog:", Ui_MainWindow.filePath)
-        
-        num = contact_updated.getNum(Ui_MainWindow.filePath)
-        
-        progress = QtWidgets.QProgressDialog()
-        progress.setWindowTitle("Please wait...")
-        progress.setLabelText("Uploading...")
-        progress.setCancelButtonText("Cancel")
-        progress.setMinimumDuration(5)
-        progress.setWindowModality(Qt.WindowModal)
-        progress.setRange(0, num)
+            print("test in showDialog:", Ui_MainWindow.filePath)
 
-        temptotal = 0
-        for i in range(2, num-2):
-            progress.setValue(i)
-            # message = ForTransferButtonTest.main(Ui_MainWindow.filePath)
-            message, temp = contact_updated.main(Ui_MainWindow.filePath, i, Ui_MainWindow.startDate, Ui_MainWindow.endDate)
-            temptotal = temptotal + temp
-            # for debug only
-            # message = "The file inputted into the program can not be found within the path"
-            if progress.wasCanceled():
-                QtWidgets.QMessageBox.warning(None, "Error", "Canceled", QtWidgets.QMessageBox.Yes)
-                break
-            self.settotal(temptotal)
-        if(message):
-            progress.setValue(num)
-            QtWidgets.QMessageBox.warning(None, "Done", message, QtWidgets.QMessageBox.Yes)
-        else:
-            message = str(Ui_MainWindow.total) + " records has been transferred successfully."
-            progress.setValue(num)
-            self.resettotal()
-            QtWidgets.QMessageBox.information(None, "Done", message, QtWidgets.QMessageBox.Yes)
-            contact_updated.saveDate(Ui_MainWindow.endDate)
+            num = contact_updated.getNum(Ui_MainWindow.filePath)
+
+            progress = QtWidgets.QProgressDialog()
+            progress.setWindowTitle("Please wait...")
+            progress.setLabelText("Uploading...")
+            progress.setCancelButtonText("Cancel")
+            progress.setMinimumDuration(5)
+            progress.setWindowModality(Qt.WindowModal)
+            progress.setRange(0, num)
+
+            temptotal = 0
+            for i in range(2, num-2):
+                progress.setValue(i)
+                # message = ForTransferButtonTest.main(Ui_MainWindow.filePath)
+                message, temp = contact_updated.main(Ui_MainWindow.filePath, i, Ui_MainWindow.startDate, Ui_MainWindow.endDate)
+                temptotal = temptotal + temp
+                # for debug only
+                # message = "The file inputted into the program can not be found within the path"
+                if progress.wasCanceled():
+                    QtWidgets.QMessageBox.warning(None, "Error", "Canceled", QtWidgets.QMessageBox.Yes)
+                    break
+                self.settotal(temptotal)
+            if(message):
+                progress.setValue(num)
+                QtWidgets.QMessageBox.warning(None, "Done", message, QtWidgets.QMessageBox.Yes)
+            else:
+                message = str(Ui_MainWindow.total) + " records has been transferred successfully."
+                progress.setValue(num)
+                self.resettotal()
+                QtWidgets.QMessageBox.information(None, "Done", message, QtWidgets.QMessageBox.Yes)
+                contact_updated.saveDate(Ui_MainWindow.endDate)
 
     def settotal(self, num):
         Ui_MainWindow.total = num
