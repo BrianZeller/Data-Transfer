@@ -23,7 +23,7 @@ Transfers the Innovation Advisor Profile Survey data in a CSV file exported from
 3. Replace FIELD_NAME_IN_INSIGHTLY with the corresponding field name in Insightly such as 'CONTACT_FIELD_129' and 'LAST_NAME'.
 4. Replace the function name getField into something more relevant such as getAcademicBackground and getOrganization.
 
-#### Data Types in Insightly:
+#### Templates for Different Data Types:
 1. Text (Insightly Built-In Fields)
 ```
 if (row['FIELD_NAME_IN_CSV']):
