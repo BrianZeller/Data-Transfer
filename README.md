@@ -89,7 +89,35 @@ if (row['FIELD_NAME_IN_CSV']):
     json_dict['CUSTOMFIELDS'].append(getField(row['FIELD_NAME_IN_CSV'], json_dict2))
 ```
 6. Checkbox
-7. Organization related
+```
+def getField(field_value, json_dict2):
+    json_dict2['CUSTOMFIELDS'] = {}
+    json_dict2['CUSTOMFIELDS']['FIELD_NAME'] = 'FIELD_NAME_IN_INSIGHTLY'
+    json_dict2['CUSTOMFIELDS']['FIELD_VALUE'] = True
+    json_dict2['CUSTOMFIELDS']['CUSTOM_FIELD_ID'] = 'FIELD_NAME_IN_INSIGHTLY'
+    return json_dict2['CUSTOMFIELDS']
+
+if (row['FIELD_NAME_IN_CSV']):
+    json_dict['CUSTOMFIELDS'].append(getField(row['FIELD_NAME_IN_CSV'], json_dict2))
+```
+7. Organization Name
+```
+def getOrganization(insightlyAPIurl, insightlyAPIkey, organizationResponses, rownum):
+    organization_id = None
+    r = requests.get(
+        insightlyAPIurl + '/Organisations/Search?field_name=ORGANISATION_NAME&field_value=' + organizationResponses + '&brief=false&count_total=false', auth=(insightlyAPIkey, ''))
+    organization_json = r.json()
+    if (organization_json): # if list is  not empty, it means ORGANISATION_ID exists
+        organization_json = organization_json[0]  # first item in list is the organization dict
+        organization_id = int(organization_json['ORGANISATION_ID'])
+    else:
+        logObject.writeNotification(rownum, "Organization name is not found in Insightly Organisation database")
+    # Print log statement that Organization does not exist in Insightly
+    return organization_id
+
+if (row['Organization 1_1']):
+    json_dict['ORGANISATION_ID'] = getOrganization(insightlyAPIurl, insightlyAPIkey, row['Organization 1_1'], rownum)
+```
 
 ### Miscellaneous
 - The last updated date time is saved in savedData.txt
