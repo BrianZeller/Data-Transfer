@@ -21,22 +21,50 @@ Transfers the Innovation Advisor Profile Survey data in a CSV file exported from
 Data Types in Insightly:
 1. Text (Insightly Built-In Fields)
 ```
-   if (row['FIELD_NAME_IN_CSV']):
-      json_dict['FIELD_NAME_IN_INSIGHTLY'] = row['FIELD_NAME_IN_CSV']
+if (row['FIELD_NAME_IN_CSV']):
+    json_dict['FIELD_NAME_IN_INSIGHTLY'] = row['FIELD_NAME_IN_CSV']
 ```
 2. Text (Custom Fields) 
 ```
-def getField(responses, json_dict2):
+def getField(field_value, json_dict2):
     json_dict2['CUSTOMFIELDS'] = {}
     json_dict2['CUSTOMFIELDS']['FIELD_NAME'] = 'FIELD_NAME_IN_INSIGHTLY'
-    json_dict2['CUSTOMFIELDS']['FIELD_VALUE'] = responses
+    json_dict2['CUSTOMFIELDS']['FIELD_VALUE'] = field_value
     json_dict2['CUSTOMFIELDS']['CUSTOM_FIELD_ID'] = 'FIELD_NAME_IN_INSIGHTLY'
     return json_dict2['CUSTOMFIELDS']
+
 if (row['FIELD_NAME_IN_CSV']):
     json_dict['CUSTOMFIELDS'].append(getField(row['FIELD_NAME_IN_CSV'], json_dict2))
 ```
-3. Integer
+3. Integer 
+```
+def getField(field_value, json_dict2):
+    json_dict2['CUSTOMFIELDS'] = {}
+    json_dict2['CUSTOMFIELDS']['FIELD_NAME'] = 'FIELD_NAME_IN_INSIGHTLY'
+    json_dict2['CUSTOMFIELDS']['FIELD_VALUE'] = int(field_value)
+    json_dict2['CUSTOMFIELDS']['CUSTOM_FIELD_ID'] = 'FIELD_NAME_IN_INSIGHTLY'
+    return json_dict2['CUSTOMFIELDS']
+
+if (row['FIELD_NAME_IN_CSV']):
+    json_dict['CUSTOMFIELDS'].append(getField(row['FIELD_NAME_IN_CSV'], json_dict2))
+```
 4. Single Choice in Dropdown
+```
+def getField(field_value, json_dict2):
+    field_decoder = {
+        1: "Option A"
+        , 2: "Option B"
+        , 3: "Option C"
+    }
+    json_dict2['CUSTOMFIELDS'] = {}
+    json_dict2['CUSTOMFIELDS']['FIELD_NAME'] = 'FIELD_NAME_IN_INSIGHTLY'
+    json_dict2['CUSTOMFIELDS']['FIELD_VALUE'] = field_decoder[int(field_value)]
+    json_dict2['CUSTOMFIELDS']['CUSTOM_FIELD_ID'] = 'FIELD_NAME_IN_INSIGHTLY'
+    return json_dict2['CUSTOMFIELDS']
+
+if (row['FIELD_NAME_IN_CSV']):
+    json_dict['CUSTOMFIELDS'].append(getField(row['FIELD_NAME_IN_CSV'], json_dict2))
+```
 5. Multiple Choice in Dropdown
 6. Checkbox
 7. Organization related
