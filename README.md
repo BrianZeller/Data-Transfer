@@ -159,7 +159,7 @@ subIndMedDev = {1:(4, "Cybersecurity"), 2:(2, "Manufacturing"), 3:(1, "R&D"), 4:
 This dictionary works in the same manner that the typical Industry dictionary does as seen with indAgriculture.
 
 #### How to modify Industry EiR decoder
-In order to update the decoder, if the order of questions in the survey have been changed, first determine the indexes that comprise the survey responses pertaining to the Industry EiR questions and change it the decodeIndustry argument to the slice of indexes.
+In order to update the decoder, if the order of questions in the survey have been changed, first determine the indexes that comprise the survey responses pertaining to the Industry EiR questions and change it the getIndustryEiR argument to the slice of indexes.
 
 #### To update the industry dictionary
 The key values are the response number in the survey. Change the value for the given key to that industry's corresponding EiR code.
@@ -206,9 +206,37 @@ industryName =  indNewIndustrySubs[industryCode][subIndustryR][1]
 Refer to "To update an industry dictionary"
 
 9. Skills EiR
-```
 
+The Skill EiR is obtained through passing a list of the skill responses into a decoder. The decoder is organized by dictionaries that pertain to the Skill Category and Skill. 
 ```
+skill = {1:8, 2:2, 3:7, 4:6, 5:1, 6:9, 7:3, 8:5, 9:10, 10:4}
+```
+The above dictionary relates the skill category response to the corresponding EiR code value. The obtained value is then given to the following dictionary.
+```
+skillDict = {1:marketing, 2: bizModel, 3:MVPDesign, 4:sales, 5:operations, 6:mgmtHR, 7:finMgmt, 8:businessLaw, 9:medDev, 10:pharma}
+```
+This dictionary then, based on the given EiR code segment, access another dictionary for the given Skill Category, for example, if the survey response had a value of 4 it would then get a value of 6 from the skill dictionary and then access the dictionary for Management & Human Capital through the skillDict dictionary. The decoder then obtains the value from the follow-up question in the survey responses and uses that to obtain the corresponding skill in a dictionary such as the following.
+```
+mgmtHR = {1:(7, "Compensation & Payroll"), 2:(4, "Governance, Boards & Advisors"), 3:(5, "HR Management"), 4:(3, "Partnerships & Negotiations"), 5:(2, "Project Management"), 6:(6, "Recruiting & Team Building"), 7:(1, "Strategic Planning")}
+```
+If the follow-up question had the response of 5 the decoder would get (2, "Project Management") which contains the Skill EiR code segment and the Skill Name.
+
+#### How to modify the Skill EiR decoder
+In order to update the decoder, if the order of questions in the survey have been changed, first determine the indexes that comprise the survey responses pertaining to the Skill EiR questions and change it in the getSkillEiR argument to the slice of indexes.
+
+#### To update the skill dictionary
+The key values are the response number in the survey. Change the value for the given key to that skill category's corresponding EiR code.
+
+#### To update the skillDict dictionary
+The key values are the EiR code corresponding to the Skill Category segment of the EiR code. Change the value to the dictionary that matches that key.
+
+#### To update a skill dictionary for a category
+The key values are again the response number for the given skill in the survey. Change the values of the tuple which is comprised of
+```
+(skillEiR, "Skill Name")
+```
+to match the new survey answer order.
+
 ### Miscellaneous
 - The last updated date time is saved in savedData.txt
 - Local Business Executive and Local Service Provider place holders are in the getUCIAffiliation function of contact_updated.py
