@@ -4,6 +4,7 @@ import csv
 import tkinter as tk
 import Decoder
 import logHandler
+import APIKeyFunction
 from datetime import datetime
 from tkinter import filedialog
 import sys
@@ -389,7 +390,7 @@ def main(file_path, rownum, start, end):
     message = ""
     # Insightly API Key
     pod = 'na1'
-    insightlyAPIkey = "2749c36f-192d-423b-ab08-e9b793299427"
+    insightlyAPIkey = APIKeyFunction.APIKey()
     insightlyAPIurl = "https://api.{}.insightly.com/v3.1".format(pod)
 
     try:
@@ -480,7 +481,7 @@ def main(file_path, rownum, start, end):
 
             # Section 5: Career Background
             if (row['Organization 1_1']):
-                json_dict['ORGANISATION_ID'] = getOrganization(insightlyAPIurl, insightlyAPIkey, row['Organization 1_1'], rownum)
+                json_dict['ORGANISATION_ID'] = getOrganization(insightlyAPIurl, insightlyAPIkey.getAPI(), row['Organization 1_1'], rownum)
                 
             if (row['Organization 1_2']):
                 json_dict['TITLE'] = row['Organization 1_2']
@@ -548,19 +549,17 @@ def main(file_path, rownum, start, end):
 
             # Transfer CSV data into Insightly
             print(json_dict)
-            r = requests.post(insightlyAPIurl + '/Contacts', json=json_dict, auth=(insightlyAPIkey, ''))
-            #r = requests.get(insightlyAPIurl + '/Contacts/226834731', auth=(insightlyAPIkey, ''))
-            print(r.text) 
-            # if r.status_code != 200:
-            #     logObject.writePostFailure(rownum, r.status_code)
-            # else:
-            #     logObject.writePostSuccess(rownum)
+            r = requests.post(insightlyAPIurl + '/Contacts', json=json_dict, auth=(insightlyAPIkey.getAPI(), ''))
+            if r.status_code != 200:
+                logObject.writePostFailure(rownum, r.status_code)
+            else:
+                logObject.writePostSuccess(rownum)
             imported_count += 1
 
-            # # Close savedData file
-            # with open("savedData.txt", "w+") as file:
-            #     file.write(datetime.strftime(date_time_obj, '%Y-%m-%d %H:%M:%S'))
-            #     file.close()
+            # Close savedData file
+            with open("savedData.txt", "w+") as file:
+                file.write(datetime.strftime(date_time_obj, '%Y-%m-%d %H:%M:%S'))
+                file.close()
 
             # print(imported_count, "row(s) of data has been transferred successfully.")
 
