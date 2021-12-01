@@ -176,7 +176,32 @@ to match the new survey answer order.
 
 #### To update a industry that has sub-industries
 The key values are the corresponding section of the EiR code, change the dictionary to correspond to the new EiR code.
-
+In decodeIndustry there is the section
+```
+if categoryCode not in [3, 4, 13]:
+```
+change the values in [] to match the EiR codes for the Industry Categories that have Sub-Industries. Following this there an else statement that leads to a couple of sections of code that looks like this
+```
+if categoryCode == 3:
+                    subindex = 18 + industryR
+                    for subIndustryR in responses[subindex]:
+                        subIndustryCode = indHlthcareSubs[industryCode][subIndustryR][0]
+                        industryName =  indHlthcareSubs[industryCode][subIndustryR][1]
+                        industryEiR.append("{:02d}'{:02d}'{:02d} {}".format(categoryCode, industryCode, subIndustryCode, industryName))
+```
+First change the if statment to match the new EiR code value here
+```
+if categoryCode == newEir:
+```
+If the order of questions in the survey changed, or a new industry with sub-industries was added change the subindex offset to match where the new section of sub-industries begins in the list. For example, here the offset is 18 due to the Healthcare Sub-Industries survey responses starting in the 19th index of the sliced list, so the previous index is used as a starting location.
+```
+subindex = offset + industryR
+```
+Next change the sub-industry dictionary to match the new industry category being used.
+```
+subIndustryCode = indNewIndustrySubs[industryCode][subIndustryR][0]
+industryName =  indNewIndustrySubs[industryCode][subIndustryR][1]
+```
 #### To update a subInd dictionary
 Refer to "To update an industry dictionary"
 
