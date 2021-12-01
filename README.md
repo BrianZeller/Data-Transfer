@@ -135,9 +135,28 @@ if (row['FIELD_NAME_IN_CSV']):
     json_dict['ORGANISATION_ID'] = getOrganization(insightlyAPIurl, insightlyAPIkey, row['FIELD_NAME_IN_CSV'], rownum)
 ```
 8. Industry EiR
+The Industry EiR is obtained through passing a list of the industry responses into a decoder. The decoder is organized by dictionaries that pertain to the Industry Category, Industry, and the Sub-Industry.
 ```
+industry = {1:8, 2:2, 3:12, 4:13, 5:1, 6:3, 7:4, 8:15, 9:6, 10:11, 11:9, 12:14, 13:10, 14:5, 15:7}
+```
+The dictionary above relates the response number of the given Industry Category in the survey to the value that it has for the Category section of the EiR code. The obtained value is then given to the following dictionary.
+```
+indCategory = {1:indEnergy, 2:indCleantech, 3:indHlthcare, 4:indIT, 5:indTechHard, 6:indManufact, 7:indTransport, 8:indAgriculture, 9:indMonetary, 10:indRealEst, 11:indMaterials, 12:indConsGds, 13:indConsServ, 14:indPubServ, 15:indLaw}
+```
+This dictionary then, based on the given code section, accesses another dictionary for the given Industry Category. For example, if the survey response had a value of 6, it would then get 3 from the industry dictionary, which then accesses the indHlthcare dictionary which corresponds to the Healthcare & Patient Services Industry Category. The decoder then goes to the list index that corresponds with that Category and obtains the responses for the Industry. Industries that do not have Sub-Industries takes the response values and returns the Industry section EiR code along with the Industry name. This is done through a dictionary such as indAgriculture shown below.
+```
+indAgriculture = {1:(1, "Agricultural Production & Policy") , 2:(4, "Animal Husbandry"), 3:(8, "Desalination"), 4:(7, "Drought Management"), 5:(9, "Environmental Protection"), 6:(11, "Forestry"), 7:(2, "Genetically Modified Crops"), 8:(3, "Green Biotechnology"), 9:(5, "Veterinary Services"), 10:(10, "Waste Management & Recycling"), 11:(6, "Water Management")}
+```
+Industries that do have Sub-Industries however, have an additional dictionary for determining the Industry prior to the Sub-Industry as seen below.
+```
+indHlthcareSubs = {1:subIndMedDev, 2:subIndPharm, 3:subIndBiotech, 4:subIndHlthServ, 5:subIndHlthTech, 6:subIndWellness}
+```
+After determining the Industry through this additional dictionary, it goes to a Sub-Industry dictionary for that given Category, as can be seen below.
+```
+subIndMedDev = {1:(4, "Cybersecurity"), 2:(2, "Manufacturing"), 3:(1, "R&D"), 4:(3, "Standards and Regulations")}
+```
+This dictionary works in the same manner that the typical Industry dictionary does as seen with indAgriculture.
 
-```
 9. Skills EiR
 ```
 
