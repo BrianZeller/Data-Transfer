@@ -135,6 +135,7 @@ if (row['FIELD_NAME_IN_CSV']):
     json_dict['ORGANISATION_ID'] = getOrganization(insightlyAPIurl, insightlyAPIkey, row['FIELD_NAME_IN_CSV'], rownum)
 ```
 8. Industry EiR
+
 The Industry EiR is obtained through passing a list of the industry responses into a decoder. The decoder is organized by dictionaries that pertain to the Industry Category, Industry, and the Sub-Industry.
 ```
 industry = {1:8, 2:2, 3:12, 4:13, 5:1, 6:3, 7:4, 8:15, 9:6, 10:11, 11:9, 12:14, 13:10, 14:5, 15:7}
