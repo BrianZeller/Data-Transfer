@@ -157,6 +157,28 @@ subIndMedDev = {1:(4, "Cybersecurity"), 2:(2, "Manufacturing"), 3:(1, "R&D"), 4:
 ```
 This dictionary works in the same manner that the typical Industry dictionary does as seen with indAgriculture.
 
+## How to modify Industry EiR decoder
+In order to update the decoder, if the order of questions in the survey have been changed, first determine the indexes that comprise the survey responses pertaining to the Industry EiR questions and change it the decodeIndustry argument to the slice of indexes.
+
+# To update the industry dictionary
+The key values are the response number in the survey. Change the value for the given key to that industry's corresponding EiR code.
+
+# To update the indCategory diction
+If the EiR codes changed order, change the industry category to match the corresponding key value.
+
+# To update an industry dictionary
+The key values are again the response number for the given industry in the survey. Change the values of the tuple which is comprised of
+```
+(EiRsection, "Industry Name")
+```
+to match the new survey answer order.
+
+# To update a industry that has sub-industries
+The key values are the corresponding section of the EiR code, change the dictionary to correspond to the new EiR code.
+
+# To update a subInd dictionary
+Refer to "To update an industry dictionary"
+
 9. Skills EiR
 ```
 
