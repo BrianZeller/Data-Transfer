@@ -387,10 +387,6 @@ def main(file_path, rownum, start, end):
         # CSV Source
         file_name = file_path
         imported_count = 0
-        # Get last saved datetime
-        with open("savedData.txt", "r") as file:
-            saveddate = file.readline()
-            lastdate = datetime.strptime(saveddate, '%Y-%m-%d %H:%M:%S')
             
         # Get data from CSV and transfer
         with open(file_name, newline="") as csv_file:
