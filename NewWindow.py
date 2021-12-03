@@ -155,16 +155,11 @@ class Ui_MainWindow(object):
         else:
             if not Ui_MainWindow.default:
                 Ui_MainWindow.startDate = self.dateTimeEdit.dateTime().toString('yyyy-MM-dd hh:mm:ss')
-                print("from:", Ui_MainWindow.startDate)
                 Ui_MainWindow.endDate = self.dateTimeEdit_2.dateTime().toString('yyyy-MM-dd hh:mm:ss')
-                print("to: ", Ui_MainWindow.endDate)
             else:
                 # Ui_MainWindow.startDate = self.dateTimeEdit.dateTime()
-                print("from:", Ui_MainWindow.startDate)
                 Ui_MainWindow.endDate = QDateTime.currentDateTime().toString('yyyy-MM-dd hh:mm:ss')
-                print("to: ", Ui_MainWindow.endDate)
 
-            print("test in showDialog:", Ui_MainWindow.filePath)
 
             num = contact_updated.getNum(Ui_MainWindow.filePath)
 
@@ -210,9 +205,7 @@ class Ui_MainWindow(object):
         fileName, _ = QtWidgets.QFileDialog.getOpenFileName(None, "QFileDialog.getOpenFileName()", "",
                                                   "(*.csv);;Python Files (*.py)", options=options)
         if fileName:
-            print("get from dialog:", fileName)
             Ui_MainWindow.filePath = fileName
-            print("test:", Ui_MainWindow.filePath)
 
         self.label_path.setText(Ui_MainWindow.filePath)
 
