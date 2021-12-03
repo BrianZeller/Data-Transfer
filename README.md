@@ -7,8 +7,7 @@ Kai Li Tan, Jing Wu, Justin Yoo, Brian Zeller, Yuan Wang
 Transfers the Innovation Advisor Profile Survey data in a CSV file exported from Qualtrics into the Insightly Contacts database.
 
 ### Warning
-There needs to be .txt file called APIKey.txt with the API key, on one line, in the same folder as the .exe file as well as another .txt file called savedData with the datetime format YY-MM-DD HR:MM:SS of the last updated date in one line.
-
+There needs to be .txt file called APIKey.txt with the API key, on one line, in the same folder as the .exe file
 ### How-to-Use
 1. Run prototype.py 
 2. Select time range of data to transfer: 
