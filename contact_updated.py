@@ -12,10 +12,7 @@ import sys
 logObject = logHandler.LogHandler()
 
 def getNum(file_path):
-    # print("getNum is being called")
     file_name = file_path
-    # print("file_path pass in:" , file_path)
-    # print("file_name got:" , file_name)
     row = 0
     count = 0
     with open(file_name, 'r') as f:
@@ -139,7 +136,7 @@ def academicDecoder(academic_area, json_dict2):
     json_dict2['CUSTOMFIELDS']['CUSTOM_FIELD_ID'] = 'UCI_unit__c'
     return json_dict2['CUSTOMFIELDS']
 
-def getOrganization(insightlyAPIurl, insightlyAPIkey, organizationResponses, rownum):
+def getOrganization(insightlyAPIurl, insightlyAPIkey, organizationResponses, contactName):
     organization_id = None
     r = requests.get(
         insightlyAPIurl + '/Organisations/Search?field_name=ORGANISATION_NAME&field_value=' + organizationResponses + '&brief=false&count_total=false', auth=(insightlyAPIkey, ''))
@@ -147,16 +144,11 @@ def getOrganization(insightlyAPIurl, insightlyAPIkey, organizationResponses, row
     if (organization_json): # if list is  not empty, it means ORGANISATION_ID exists
         organization_json = organization_json[0]  # first item in list is the organization dict
         organization_id = int(organization_json['ORGANISATION_ID'])
-        # json_dict2['CUSTOMFIELDS'] = {}
-        # json_dict2['CUSTOMFIELDS']['FIELD_NAME'] = 'ORGANISATION_ID'
-        # json_dict2['CUSTOMFIELDS']['FIELD_VALUE'] = int(organization_json['ORGANISATION_ID'])
-        # json_dict2['CUSTOMFIELDS']['CUSTOM_FIELD_ID'] = 'ORGANISATION_ID'
+
     else:
-        logObject.writeNotification(rownum, "organization not found")
+        logObject.writeOrganizationNotFound(contactName, organizationResponses)
     # Print log statement that Organization does not exist in Insightly
     
-    # else:
-    #     print('Organization name not found for ORGANISATION_NAME: ' + row['Organization 1_1']) 
     return organization_id
 
 def getIndustryEiR(industryResponses, json_dict2):
@@ -382,6 +374,7 @@ def getAIOpp(Opp, json_dict2):
     json_dict2['CUSTOMFIELDS']['CUSTOM_FIELD_ID'] = 'EiR_Desired_Role_From_Survey__c'
     return json_dict2['CUSTOMFIELDS']
 
+
 def main(file_path, rownum, start, end):
     # error message pass back to window
     message = ""
@@ -398,12 +391,6 @@ def main(file_path, rownum, start, end):
         with open("savedData.txt", "r") as file:
             saveddate = file.readline()
             lastdate = datetime.strptime(saveddate, '%Y-%m-%d %H:%M:%S')
-            # if not saveddate:
-            #     useLastDate = 0
-            # else:
-            #     lastdate = datetime.strptime(saveddate, '%Y-%m-%d %H:%M:%S')
-            #     useLastDate = 1
-            # file.close()
             
         # Get data from CSV and transfer
         with open(file_name, newline="") as csv_file:
@@ -411,16 +398,17 @@ def main(file_path, rownum, start, end):
             for i, rows in enumerate(reader):
                 if i == rownum:
                     row = rows
-                    # print(rownum, row)
-
             if int(row["Progress"]) != 100:
-                #print("progress return")
-                logObject.writeIncompleteResponse(rownum, row["Progress"])
                 return message, imported_count
             # convert start and end time
             start_date = datetime.strptime(start, '%Y-%m-%d %H:%M:%S')
             end_date = datetime.strptime(end, '%Y-%m-%d %H:%M:%S')
           
+            email = row["Contact_3"]
+            if email:
+                r = requests.get(insightlyAPIurl + '/Contacts/Search?field_name=EMAIL_ADDRESS&field_value=' + email + '&brief=false&count_total=false', auth=(insightlyAPIkey.getAPI(), ''))
+                if r.status_code == 200:
+                    return message, imported_count
 
             # Check if datetime is valid to extract data from
 
@@ -434,17 +422,10 @@ def main(file_path, rownum, start, end):
                     return message, imported_count # Message?
             
 
-            # if useLastDate:
-            # if lastdate >= date_time_obj:
-            #     print("lastdate return")
-            #     return message, imported_count
-            
             # check time frame
+
             if start_date >= date_time_obj or end_date < date_time_obj:
-                logObject.writeNotInDateRange(rownum)
-                # print("start_date:", start_date)
-                # print("date:", date_time_obj)
-                # print("end_date:", end_date)
+
                 return message, imported_count
             
             json_dict = {"CONTACT_ID": None, "FIRST_NAME": row['Contact_1']}
@@ -478,7 +459,8 @@ def main(file_path, rownum, start, end):
 
             # Section 5: Career Background
             if (row['Organization 1_1']):
-                json_dict['ORGANISATION_ID'] = getOrganization(insightlyAPIurl, insightlyAPIkey.getAPI(), row['Organization 1_1'], rownum)
+                contactName = "{} {}".format(row["Contact_1"], row["Contact_2"])
+                json_dict['ORGANISATION_ID'] = getOrganization(insightlyAPIurl, insightlyAPIkey.getAPI(), row['Organization 1_1'], contactName)
                 
             if (row['Organization 1_2']):
                 json_dict['TITLE'] = row['Organization 1_2']
@@ -525,9 +507,6 @@ def main(file_path, rownum, start, end):
             if row['UCI Affiliation']:
                 uci_affiliation = row['UCI Affiliation'].split(",")
                 json_dict['CUSTOMFIELDS'].extend(getUCIAffiliation(uci_affiliation, json_dict2))
-                # affiliationList = getUCIAffiliation(uci_affiliation,json_dict2) #list(Dictionary) -> add dictionary into json_dict['CUSTOMFIELDS']
-                # for indx, i in enumerate(affiliationList):
-                #     json_dict['CUSTOMFIELDS'].append(indx, i)
                 
             academic_area = []
             if (row['UCI Student']):
@@ -545,20 +524,16 @@ def main(file_path, rownum, start, end):
                 json_dict['CUSTOMFIELDS'].append(getUCIStaff(uci_staff_str, json_dict2))
 
             # Transfer CSV data into Insightly
-            print(json_dict)
             r = requests.post(insightlyAPIurl + '/Contacts', json=json_dict, auth=(insightlyAPIkey.getAPI(), ''))
             if r.status_code != 200:
-                logObject.writePostFailure(rownum, r.status_code)
-            else:
-                logObject.writePostSuccess(rownum)
+                contactName = "{} {}".format(row["Contact_1"], row["Contact_2"])
+                logObject.writePostFailure(contactName, r.status_code)
             imported_count += 1
 
             # Close savedData file
             with open("savedData.txt", "w+") as file:
                 file.write(datetime.strftime(date_time_obj, '%Y-%m-%d %H:%M:%S'))
                 file.close()
-
-            # print(imported_count, "row(s) of data has been transferred successfully.")
 
 
     except (csv.Error, FileNotFoundError) as e:  # display error
