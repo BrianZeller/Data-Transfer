@@ -9,6 +9,8 @@ from datetime import datetime
 from tkinter import filedialog
 import sys
 
+import time
+
 logObject = logHandler.LogHandler()
 
 def getNum(file_path):
@@ -146,8 +148,8 @@ def getOrganization(insightlyAPIurl, insightlyAPIkey, organizationResponses, con
         organization_id = int(organization_json['ORGANISATION_ID'])
 
     else:
+        # Print log statement that Organization does not exist in Insightly
         logObject.writeOrganizationNotFound(contactName, organizationResponses)
-    # Print log statement that Organization does not exist in Insightly
     
     return organization_id
 
@@ -408,9 +410,9 @@ def main(file_path, rownum, start, end):
             email = row["Contact_3"]
             if email:
                 r = requests.get(insightlyAPIurl + '/Contacts/Search?field_name=EMAIL_ADDRESS&field_value=' + email + '&brief=false&count_total=false', auth=(insightlyAPIkey.getAPI(), ''))
-                if r.status_code == 200:
+                if len(r.text) != 2:
                     return message, imported_count
-
+                
             # Check if datetime is valid to extract data from
 
             try:
