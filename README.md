@@ -239,4 +239,3 @@ to match the new survey answer order.
 
 ### Miscellaneous
 - The last updated date time is saved in savedData.txt
-- Local Business Executive and Local Service Provider place holders are in the getUCIAffiliation function of contact_updated.py
