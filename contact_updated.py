@@ -90,21 +90,18 @@ def getUCIAffiliation(uci_affiliation, json_dict2):
             json_dict2['CUSTOMFIELDS']['FIELD_VALUE'] = True
             json_dict2['CUSTOMFIELDS']['CUSTOM_FIELD_ID'] = 'CONTACT_FIELD_132'
             returnJsonDict.append(json_dict2['CUSTOMFIELDS'])
-            # NOTES: Add Local Business Executive and Local Service Provider here by modifying the field name and field ID
-            # Local Business Executive
-            # if ('6' in uci_affiliation):
-            #     json_dict2['CUSTOMFIELDS'] = {}
-            #     json_dict2['CUSTOMFIELDS']['FIELD_NAME'] = 'CONTACT_FIELD_xxx'
-            #     json_dict2['CUSTOMFIELDS']['FIELD_VALUE'] = True
-            #     json_dict2['CUSTOMFIELDS']['CUSTOM_FIELD_ID'] = 'CONTACT_FIELD_xxx'
-            #     json_dict['CUSTOMFIELDS'].append(json_dict2['CUSTOMFIELDS'])
-            # Local Service Provider
-            # if ('7' in uci_affiliation):
-            #     json_dict2['CUSTOMFIELDS'] = {}
-            #     json_dict2['CUSTOMFIELDS']['FIELD_NAME'] = 'CONTACT_FIELD_xxx'
-            #     json_dict2['CUSTOMFIELDS']['FIELD_VALUE'] = True
-            #     json_dict2['CUSTOMFIELDS']['CUSTOM_FIELD_ID'] = 'CONTACT_FIELD_xxx'
-            #     json_dict['CUSTOMFIELDS'].append(json_dict2['CUSTOMFIELDS']
+        if ('6' in uci_affiliation): # Local Business Executive
+            json_dict2['CUSTOMFIELDS'] = {}
+            json_dict2['CUSTOMFIELDS']['FIELD_NAME'] = 'Local_Business_Executive___c'
+            json_dict2['CUSTOMFIELDS']['FIELD_VALUE'] = True
+            json_dict2['CUSTOMFIELDS']['CUSTOM_FIELD_ID'] = 'Local_Business_Executive___c'
+            returnJsonDict.append(json_dict2['CUSTOMFIELDS'])
+        if ('7' in uci_affiliation): # Local Service Provider
+            json_dict2['CUSTOMFIELDS'] = {}
+            json_dict2['CUSTOMFIELDS']['FIELD_NAME'] = 'Local_Service_Provider__c'
+            json_dict2['CUSTOMFIELDS']['FIELD_VALUE'] = True
+            json_dict2['CUSTOMFIELDS']['CUSTOM_FIELD_ID'] = 'Local_Service_Provider__c'
+            returnJsonDict.append(json_dict2['CUSTOMFIELDS'])
 
     return returnJsonDict
 
