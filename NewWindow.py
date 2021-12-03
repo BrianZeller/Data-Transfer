@@ -12,6 +12,7 @@ from PyQt5 import QtCore, QtGui, QtWidgets
 from PyQt5.QtCore import Qt, QDate, QDateTime, QTime
 
 import contact_updated
+DEFAULT_TIME = "2000-01-01 00:00:00"
 
 
 class Ui_MainWindow(object):
@@ -121,8 +122,14 @@ class Ui_MainWindow(object):
     def retranslateUi(self, MainWindow):
 
         # read date from txt file
-        with open("savedData.txt", 'r') as showDate:
-            Ui_MainWindow.startDate = showDate.readline()
+        with open("savedData.txt", "a+") as checkFile:
+            checkFile.close()
+        with open("savedData.txt", 'r+') as showDate:
+            date = showDate.readline()
+            if date:
+                Ui_MainWindow.startDate = date
+            else:
+                Ui_MainWindow.startDate = DEFAULT_TIME
 
         _translate = QtCore.QCoreApplication.translate
         MainWindow.setWindowTitle(_translate("MainWindow", "MainWindow"))
