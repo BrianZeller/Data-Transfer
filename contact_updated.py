@@ -380,7 +380,12 @@ def main(file_path, rownum, start, end):
     message = ""
     # Insightly API Key
     pod = 'na1'
-    insightlyAPIkey = APIKeyFunction.APIKey()
+    try:
+        insightlyAPIkey = APIKeyFunction.APIKey()
+    except Exception as e:
+        logObject.writeKeyError()
+        raise e
+    
     insightlyAPIurl = "https://api.{}.insightly.com/v3.1".format(pod)
 
     try:
