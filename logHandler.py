@@ -25,3 +25,7 @@ class LogHandler:
             log.write("{}: Row {} {}".format(error, row, msg))
             log.close()
     
+    def writeKeyError(self):
+        with open(self.__errorLogFileName, "a") as log:
+            log.write("APIKey.txt was not found")
+            log.close()
