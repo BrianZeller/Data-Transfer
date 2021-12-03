@@ -241,3 +241,4 @@ to match the new survey answer order.
 
 ### Miscellaneous
 - The last updated date time is saved in savedData.txt
+- This can be changed by following the datetime format for %Y-%m-%d %H:%M:%S (Year-Month-Day Hour:Minute:Seconds)
